@@ -1,0 +1,307 @@
+{
+  "agent": {
+    "name": "Embedded Project Idea Scoping Agent",
+    "version": "2.2",
+    "context": "Embedded Engineering and Gen AI Summer School for third-year Computer Science students",
+    "purpose": "Convert a vague embedded project idea into a structured scoping brief for requirements engineering"
+  },
+  "source_input": {
+    "original_project_idea": "Autonomous Car - self-driving vehicle that uses computer vision and TinyML on a microcontroller to follow a road, recognize traffic signs and traffic lights, and navigate autonomously in a controlled environment. Vision & AI Processing Unit: ESP32-S3 CAM board equipped with an OV3660 camera module. Hardware Execution Unit: NXP FRDM-MCXA153 microcontroller. Sensors: The OV3660 camera is the primary sensor. Additional ultrasonic or IR distance sensors will be connected directly to the NXP board. Chassis: A motorized rover platform equipped with drive motors (DC with H-Bridge). Lane Keeping (Classic Computer Vision + PID)... Traffic Sign Recognition (Edge AI / TinyML)... Obstacle Avoidance (Reactive Logic)...",
+    "input_quality": "clear"
+  },
+  "fixed_platform": {
+    "board": "NXP FRDM-MCXA153",
+    "mcu": "NXP MCXA153",
+    "status": "mandatory user constraint",
+    "pin_policy": "Use generic capabilities unless exact pins are provided",
+    "logic_level_policy": "Assume 3.3 V logic unless verified otherwise"
+  },
+  "project": {
+    "name": "Autonomous Car",
+    "short_summary": "A self-driving rover that pairs an ESP32-S3 CAM for vision and AI with the NXP FRDM-MCXA153 for robust motor control and obstacle avoidance.",
+    "main_objective": "Navigate autonomously in a controlled environment by keeping within a lane and recognizing traffic signs, while avoiding obstacles.",
+    "intended_user": "third-year Computer Science student",
+    "operating_environment": "Controlled indoor environment with clear track markings and traffic signs.",
+    "main_behavior": "The ESP32-S3 processes camera feeds for lane keeping and traffic sign recognition, sending steering and speed commands via UART to the NXP FRDM-MCXA153. The NXP board drives the motors and autonomously stops if its local distance sensors detect an obstacle.",
+    "inputs": [
+      "Camera images (via ESP32)",
+      "Distance measurements from Ultrasonic/IR sensors"
+    ],
+    "outputs": [
+      "PWM signals for motor speed control",
+      "Direction signals for H-Bridge motor drivers"
+    ],
+    "interaction_flow": [
+      "Camera continuously captures track imagery.",
+      "ESP32 computes steering angle based on lane lines.",
+      "ESP32 periodically checks for traffic signs using a TinyML model.",
+      "ESP32 sends desired speed and steering angle via UART to NXP MCU.",
+      "NXP MCU continuously polls ultrasonic/IR distance sensors.",
+      "If path is clear, NXP MCU converts UART commands to motor PWM signals.",
+      "If obstacle is detected, NXP MCU overrides commands and brakes."
+    ],
+    "out_of_scope": [
+      "GPS-based navigation",
+      "Complex mapping and path planning (SLAM)",
+      "Street-legal public road driving"
+    ]
+  },
+  "problem_space": {
+    "purpose": "Demonstrate a distributed processing architecture for edge AI robotics.",
+    "physical_process_monitored_or_controlled": "Vehicle kinematics and spatial positioning.",
+    "success_criteria": [
+      "Vehicle reliably stays between lane lines.",
+      "Vehicle stops safely when an obstacle is introduced.",
+      "Vehicle obeys at least one traffic sign (e.g., STOP sign)."
+    ],
+    "known_constraints": [
+      "Must use NXP FRDM-MCXA153 as the execution layer.",
+      "UART latency between ESP32 and NXP."
+    ],
+    "unknown_constraints": [
+      "Lighting conditions affecting camera exposure.",
+      "Motor driver current limits and power supply capabilities."
+    ]
+  },
+  "project_ambition": {
+    "core_student_version": {
+      "description": "A basic autonomous rover relying purely on the NXP FRDM-MCXA153. Instead of the ESP32 camera, it uses simple analog IR line-tracking sensors for lane keeping and an ultrasonic sensor for obstacle avoidance.",
+      "expected_difficulty": "beginner",
+      "expected_features": [
+        "IR-based line following",
+        "Ultrasonic obstacle avoidance",
+        "DC motor control via PWM and H-Bridge"
+      ],
+      "why_it_is_suitable": "Provides a manageable starting point for embedded programming and basic control loops (PID) without the complexity of computer vision."
+    },
+    "recommended_summer_school_version": {
+      "description": "Integrates the ESP32-S3 CAM for classic computer vision. The ESP32 extracts lane lines using thresholding and sends steering commands via UART to the NXP FRDM-MCXA153, which manages motors and distance sensors.",
+      "expected_difficulty": "intermediate",
+      "expected_features": [
+        "Camera-based lane tracking",
+        "UART communication protocol between two MCUs",
+        "Reactive obstacle avoidance on the execution MCU"
+      ],
+      "why_it_is_interesting": "Introduces distributed embedded systems and basic computer vision concepts.",
+      "why_it_is_still_feasible": "Splits the workload. ESP32 handles vision using existing libraries, while the NXP MCU handles real-time bare-metal motor control."
+    },
+    "advanced_extension": {
+      "description": "Adds TinyML object detection on the second core of the ESP32-S3 to recognize traffic signs (e.g., STOP, arrow). High-confidence detections trigger override commands sent to the NXP MCU.",
+      "expected_difficulty": "advanced",
+      "advanced_features": [
+        "Edge AI / TinyML inference",
+        "Asynchronous dual-core processing on ESP32",
+        "Priority-based command handling on NXP MCU"
+      ],
+      "extra_components": [
+        "ESP32-S3 CAM (already needed for recommended)"
+      ],
+      "technical_challenges": [
+        "Training and deploying a TinyML model.",
+        "Managing dual-core execution on the ESP32 without dropping frames.",
+        "Ensuring the NXP MCU handles mixed continuous/override commands smoothly."
+      ],
+      "risk_controls": [
+        "Start with a pre-trained model.",
+        "Keep the object classes very small (e.g., 2 classes)."
+      ],
+      "can_be_optional": true
+    }
+  },
+  "target_hardware": {
+    "main_board": {
+      "name": "NXP FRDM-MCXA153",
+      "mcu": "NXP MCXA153",
+      "reasoning": "Mandatory board for all summer school projects",
+      "approval_status": "user_provided"
+    },
+    "sensors": [
+      {
+        "name": "Ultrasonic Distance Sensor (e.g., HC-SR04) or IR Distance Sensor",
+        "purpose": "Detect physical obstacles for reactive emergency braking.",
+        "likely_interface": "GPIO-capable pins (Trigger/Echo) or ADC-capable pin",
+        "used_in_version": "core",
+        "voltage_or_signal_notes": "HC-SR04 typically requires 5V logic; use a 3.3V version (HC-SR04+) or level shifting.",
+        "risks": [
+          "5V logic incompatibility with 3.3V MCU pins."
+        ]
+      },
+      {
+        "name": "IR Line Tracking Sensors",
+        "purpose": "Detect lane lines if the camera is not used in the core version.",
+        "likely_interface": "GPIO-capable pins or ADC-capable pins",
+        "used_in_version": "core",
+        "voltage_or_signal_notes": "Usually 3.3V compatible.",
+        "risks": []
+      }
+    ],
+    "actuators_outputs": [
+      {
+        "name": "DC Motors with H-Bridge Driver (e.g., L298N, TB6612FNG)",
+        "purpose": "Drive the rover and steer via differential drive or a steering servo.",
+        "likely_interface": "PWM-capable pins and GPIO-capable pins",
+        "used_in_version": "core",
+        "voltage_or_power_notes": "Requires separate power supply for motors. Ground must be shared with MCU.",
+        "risks": [
+          "Motor noise affecting MCU.",
+          "High current draw browning out the MCU."
+        ]
+      }
+    ],
+    "user_inputs": [
+      {
+        "name": "Start/Stop Button",
+        "purpose": "Safely enable or disable the rover.",
+        "likely_interface": "GPIO-capable pin with interrupt",
+        "used_in_version": "core",
+        "notes": "Requires debouncing."
+      }
+    ],
+    "display_ui": [
+      {
+        "name": "Status LEDs",
+        "purpose": "Indicate operating mode (e.g., running, obstacle detected, stop sign).",
+        "likely_interface": "GPIO-capable pins",
+        "used_in_version": "core",
+        "notes": "Onboard LEDs of the FRDM-MCXA153 can be used."
+      }
+    ],
+    "communication_debug": [
+      {
+        "name": "UART Interface",
+        "purpose": "Communication link between ESP32-S3 and NXP FRDM-MCXA153.",
+        "likely_interface": "UART-capable pins",
+        "used_in_version": "recommended",
+        "notes": "Requires matched baud rate and crossed RX/TX connections. Both use 3.3V logic."
+      }
+    ],
+    "power_source": {
+      "recommended_power": "2S LiPo Battery (7.4V)",
+      "notes": "Needs step-down converters or buck modules to provide clean 5V/3.3V for MCUs and sensors, while supplying raw battery voltage to motor drivers.",
+      "risks": [
+        "LiPo over-discharge if not monitored.",
+        "Voltage spikes from motors."
+      ]
+    },
+    "optional_advanced_components": [
+      {
+        "name": "ESP32-S3 CAM (OV3660)",
+        "purpose": "Vision and Edge AI processing.",
+        "reason_to_include": "Enables computer vision and TinyML features.",
+        "reason_to_exclude": "Adds significant software complexity and requires a separate toolchain.",
+        "risks": [
+          "Power hungry when using Wi-Fi or high-fps camera.",
+          "Requires custom firmware integration alongside the NXP MCU."
+        ]
+      }
+    ]
+  },
+  "software_context": {
+    "recommended_development_environment": "MCUXpresso IDE or VS Code with NXP extension for FRDM-MCXA153; ESP-IDF or Arduino IDE for ESP32.",
+    "recommended_sdk_or_libraries": [
+      "MCUXpresso SDK (bare-metal drivers for UART, PWM, ADC)",
+      "ESP32 Camera Driver",
+      "TensorFlow Lite for Microcontrollers (ESP32)"
+    ],
+    "programming_language": "C",
+    "existing_codebase": "new_project",
+    "suggested_starting_point": "Hello World and PWM driver examples from MCUXpresso SDK.",
+    "debugging_interfaces": [
+      "On-board MCU-Link for FRDM-MCXA153",
+      "Serial console via USB"
+    ],
+    "possible_gen_ai_usage": [
+      "requirements drafting",
+      "code generation for UART parsing and motor mixing",
+      "debugging support",
+      "tuning PID loops"
+    ]
+  },
+  "constraints": {
+    "target_board": "NXP FRDM-MCXA153 is mandatory",
+    "voltage": "Assume 3.3 V logic unless verified otherwise",
+    "power": "Must manage distinct logic and motor power rails securely.",
+    "timing": "NXP MCU obstacle avoidance loop must have minimal latency (<50ms).",
+    "memory": "NXP MCU memory is sufficient; ESP32 uses PSRAM for image buffering.",
+    "safety": "Rover must not exceed safe speeds and must default to STOP on communication loss.",
+    "privacy_security": "Local processing only, no cloud streaming of camera feeds required.",
+    "student_level": "third-year university Computer Science students"
+  },
+  "complexity": {
+    "core_level": "beginner",
+    "recommended_level": "intermediate",
+    "advanced_level": "advanced",
+    "student_suitability": "suitable",
+    "reason": "The distributed architecture isolates complex AI tasks (ESP32) from safety-critical real-time control (NXP), making it highly modular and extensible for students."
+  },
+  "facts_provided_by_user": [
+    "ESP32-S3 CAM board handles vision and AI tasks.",
+    "NXP FRDM-MCXA153 handles motor PWM and steering.",
+    "Ultrasonic/IR sensors connect directly to NXP board.",
+    "ESP32 sends UART commands to NXP.",
+    "Core 0 of ESP32 does PID lane keeping at 20-30 FPS.",
+    "Core 1 of ESP32 does TinyML sign recognition at 3-5 FPS."
+  ],
+  "assumptions": [
+    {
+      "id": "A-001",
+      "assumption": "The motorized rover platform has differential drive or a servo-steered Ackermann mechanism.",
+      "reason": "Required to convert steering/speed commands into physical motion.",
+      "requires_human_approval": true
+    },
+    {
+      "id": "A-002",
+      "assumption": "Level shifting is not required for the ESP32 to NXP UART connection.",
+      "reason": "Both ESP32 and MCXA153 typically operate on 3.3V logic.",
+      "requires_human_approval": false
+    }
+  ],
+  "open_questions": [
+    {
+      "id": "Q-001",
+      "question": "What is the exact motor driver IC used?",
+      "why_it_matters": "Determines PWM frequency limits, required logic pins, and current capabilities."
+    },
+    {
+      "id": "Q-002",
+      "question": "Will a 3.3V compatible ultrasonic sensor (HC-SR04+) be provided, or standard 5V?",
+      "why_it_matters": "A 5V sensor requires a voltage divider or level shifter on the Echo pin to protect the NXP MCU."
+    }
+  ],
+  "risks": {
+    "technical": [
+      "UART message corruption causing erratic movement.",
+      "Camera framing and lighting issues causing poor line extraction."
+    ],
+    "safety": [
+      "Rover running off table or hitting objects if obstacle avoidance fails."
+    ],
+    "voltage_power": [
+      "Brownouts on ESP32 or NXP MCU due to motor current draw."
+    ],
+    "timing": [
+      "ESP32 missing frames if Core 1 TinyML tasks starve Core 0."
+    ],
+    "memory": [
+      "Running out of internal SRAM on ESP32 if PSRAM is misconfigured."
+    ],
+    "privacy_security": [],
+    "advanced_feature_risks": [
+      "Training an accurate TinyML model can be highly time-consuming."
+    ]
+  },
+  "human_approval_required": [
+    "Battery chemistry and capacity choices for safe lab use.",
+    "Approval of motor driver module selection."
+  ],
+  "handoff_to_requirements_agent": {
+    "ready_for_requirements_engineering": true,
+    "recommended_scope_for_requirements": "recommended",
+    "readiness_status": "ready_with_assumptions",
+    "readiness_notes": "The conceptual architecture is solid, but exact motor drivers and sensor part numbers must be finalized before circuit design.",
+    "critical_missing_information": [
+      "Exact chassis motor configuration (differential vs. Ackermann)."
+    ],
+    "recommended_next_agent": "Requirements Engineering Assistant Agent"
+  }
+}

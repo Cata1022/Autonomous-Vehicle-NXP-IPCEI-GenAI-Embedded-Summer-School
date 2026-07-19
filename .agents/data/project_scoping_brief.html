@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Embedded Project Scoping Brief: Autonomous Car</title>
+<style>
+  :root {
+    --primary: #2563eb;
+    --primary-light: #eff6ff;
+    --text-main: #1f2937;
+    --text-muted: #4b5563;
+    --bg-main: #f9fafb;
+    --bg-card: #ffffff;
+    --border: #e5e7eb;
+    --success: #16a34a;
+    --warning: #ca8a04;
+    --danger: #dc2626;
+  }
+  body {
+    font-family: system-ui, -apple-system, sans-serif;
+    line-height: 1.5;
+    color: var(--text-main);
+    background-color: var(--bg-main);
+    margin: 0;
+    padding: 2rem;
+  }
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: var(--bg-card);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+  h1, h2, h3 { color: var(--primary); }
+  h1 { border-bottom: 2px solid var(--primary-light); padding-bottom: 0.5rem; }
+  h2 { margin-top: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+  .badge {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    background: var(--primary-light);
+    color: var(--primary);
+  }
+  .badge.success { background: #dcfce7; color: var(--success); }
+  .badge.warning { background: #fef08a; color: var(--warning); }
+  .badge.danger { background: #fee2e2; color: var(--danger); }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+  }
+  th, td {
+    text-align: left;
+    padding: 0.75rem;
+    border: 1px solid var(--border);
+  }
+  th { background-color: var(--primary-light); }
+  .version-card {
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--primary);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 0 4px 4px 0;
+  }
+  ul { padding-left: 1.5rem; }
+  .highlight { background-color: var(--bg-main); padding: 1rem; border-radius: 4px; }
+  @media print {
+    body { background: white; padding: 0; }
+    .container { box-shadow: none; padding: 0; max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Scoping Brief: Autonomous Car</h1>
+  <p><strong>Status:</strong> <span class="badge success">Ready for Requirements Engineering</span></p>
+  <p><strong>Intended User:</strong> Third-year Computer Science student</p>
+  
+  <h2>1. Project Summary</h2>
+  <div class="highlight">
+    <p>A self-driving rover that pairs an ESP32-S3 CAM for vision and AI with the NXP FRDM-MCXA153 for robust motor control and obstacle avoidance. The project demonstrates a distributed processing architecture for edge AI robotics.</p>
+  </div>
+  <ul>
+    <li><strong>Main Objective:</strong> Navigate autonomously in a controlled environment by keeping within a lane and recognizing traffic signs, while avoiding obstacles.</li>
+    <li><strong>Core Behavior:</strong> The ESP32-S3 processes camera feeds for lane keeping and traffic sign recognition, sending steering and speed commands via UART to the NXP FRDM-MCXA153. The NXP board drives the motors and autonomously stops if its local distance sensors detect an obstacle.</li>
+  </ul>
+
+  <h2>2. Fixed Platform Requirements</h2>
+  <ul>
+    <li><strong>Main Board:</strong> NXP FRDM-MCXA153 (NXP MCXA153 MCU) <span class="badge danger">Mandatory</span></li>
+    <li><strong>Logic Level:</strong> Assume 3.3V logic unless verified otherwise.</li>
+    <li><strong>Pin Policy:</strong> Use generic capabilities (UART, PWM, GPIO) unless specific pins are designated.</li>
+  </ul>
+
+  <h2>3. Project Ambition Tiers</h2>
+  
+  <div class="version-card">
+    <h3>Core Student Version <span class="badge success">Beginner</span></h3>
+    <p>A basic autonomous rover relying purely on the NXP FRDM-MCXA153. Instead of the ESP32 camera, it uses simple analog IR line-tracking sensors for lane keeping and an ultrasonic sensor for obstacle avoidance.</p>
+    <ul>
+      <li><strong>Features:</strong> IR-based line following, Ultrasonic obstacle avoidance, DC motor control via PWM.</li>
+    </ul>
+  </div>
+
+  <div class="version-card">
+    <h3>Recommended Summer School Version <span class="badge warning">Intermediate</span></h3>
+    <p>Integrates the ESP32-S3 CAM for classic computer vision. The ESP32 extracts lane lines using thresholding and sends steering commands via UART to the NXP FRDM-MCXA153, which manages motors and distance sensors.</p>
+    <ul>
+      <li><strong>Features:</strong> Camera-based lane tracking, UART communication protocol, Reactive obstacle avoidance.</li>
+    </ul>
+  </div>
+
+  <div class="version-card">
+    <h3>Advanced Extension <span class="badge danger">Advanced</span></h3>
+    <p>Adds TinyML object detection on the second core of the ESP32-S3 to recognize traffic signs (e.g., STOP, arrow). High-confidence detections trigger override commands sent to the NXP MCU.</p>
+    <ul>
+      <li><strong>Features:</strong> Edge AI / TinyML inference, Asynchronous dual-core processing, Priority-based command handling.</li>
+    </ul>
+  </div>
+
+  <h2>4. Target Hardware</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Component</th>
+        <th>Purpose</th>
+        <th>Likely Interface</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>NXP FRDM-MCXA153</strong></td>
+        <td>Main Execution Controller</td>
+        <td>Mandatory Platform</td>
+      </tr>
+      <tr>
+        <td><strong>ESP32-S3 CAM (OV3660)</strong></td>
+        <td>Vision and Edge AI Processing</td>
+        <td>UART to NXP MCU</td>
+      </tr>
+      <tr>
+        <td><strong>Ultrasonic/IR Sensor</strong></td>
+        <td>Reactive Obstacle Avoidance</td>
+        <td>GPIO/ADC</td>
+      </tr>
+      <tr>
+        <td><strong>DC Motors & H-Bridge</strong></td>
+        <td>Drive and Steer Rover</td>
+        <td>PWM & GPIO</td>
+      </tr>
+      <tr>
+        <td><strong>2S LiPo Battery</strong></td>
+        <td>Main Power Source</td>
+        <td>Voltage Regulators (5V/3.3V)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>5. Risks & Considerations</h2>
+  <ul>
+    <li><strong>Voltage/Power:</strong> 5V logic sensors (like typical HC-SR04) require level shifting for the 3.3V NXP MCU. Motor noise and high current draw can brown out the microcontrollers.</li>
+    <li><strong>Technical:</strong> UART message corruption between MCUs, or latency in processing TinyML on the ESP32 causing missed frames.</li>
+    <li><strong>Safety:</strong> A physical kill switch (Start/Stop button) is required to safely disable the rover.</li>
+  </ul>
+
+  <h2>6. Open Questions & Assumptions</h2>
+  <ul>
+    <li><strong>Assumption:</strong> The rover platform operates using differential drive or Ackermann steering.</li>
+    <li><strong>Open Question:</strong> What exact motor driver IC is being used? This dictates PWM requirements and current capabilities.</li>
+  </ul>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,24 @@
+Use `.agents/agent_1_requirements_engineering.md`.
+
+This is the Agent 1: Requirements Engineering Assistant Agent prompt.
+
+Agent 0 JSON file:
+
+<<<SCOPING_JSON_FILE>>>
+.agents/data/project_scoping_brief.json
+<<<END_SCOPING_JSON_FILE>>>
+
+Output HTML file:
+
+<<<OUTPUT_HTML_PATH>>>
+.agents/data/requirements_report.html
+<<<END_OUTPUT_HTML_PATH>>>
+
+Read the JSON file and generate the requirements and specification package as a self-contained HTML report for human review.
+
+Remember:
+- The project must use the NXP FRDM-MCXA153 board.
+- Separate core, recommended, and advanced requirements.
+- Do not invent exact pins or SDK APIs.
+- Include tests, traceability, risks, and the human review checklist.
+- The HTML file must be self-contained and easy to open in a browser.

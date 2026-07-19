@@ -1,0 +1,71 @@
+Use `.agents/agent_0_embedded_project_scoping.md`.
+
+This is the Agent 0: Embedded Project Idea Scoping Agent prompt.
+
+User spec:
+
+<<<PROJECT_IDEA>>>
+Autonomous Car - self-driving vehicle that uses computer vision and TinyML on a
+microcontroller to follow a road, recognize traffic signs and traffic lights,
+and navigate autonomously in a controlled environment
+
+Vision & AI Processing Unit: ESP32-S3 CAM board equipped with an OV3660 camera module.
+This board handles all the computer vision tasks, neural network inference,
+and logic decisions due to its hardware vector acceleration and PSRAM.
+
+Hardware Execution Unit: NXP FRDM-MCXA153 microcontroller. This acts as the physical
+execution layer. It receives high-level commands and uses bare-metal programming
+to generate precise PWM signals for motor control and steering.
+
+Sensors: The OV3660 camera is the primary sensor. Additional ultrasonic or IR distance
+sensors will be connected directly to the NXP board for immediate, low-latency
+obstacle detection.
+
+Chassis: A motorized rover platform equipped with drive motors (DC with H-Bridge).
+
+Lane Keeping (Classic Computer Vision + PID):
+Runs on Core 0 of the ESP32-S3 at a high frame rate (20-30 FPS).
+The camera captures the road, applies a Region of Interest (ROI) mask, and uses image
+thresholding (binarization) to isolate the lane lines.
+The algorithm calculates the center of mass (centroid) between the lines to find the
+desired setpoint.
+A PID controller calculates the steering error and sends the steering angle and speed data
+to the NXP MCXA153 via a UART connection.
+
+Traffic Sign Recognition (Edge AI / TinyML):
+Runs asynchronously on Core 1 of the ESP32-S3 at a lower frame rate (3-5 FPS).
+Uses a trained TinyML Object Detection model to classify complex semantic elements like
+STOP signs or directional arrows.
+When a sign is detected with high confidence, this core sends an override command
+(e.g., "Brake for 3 seconds") to the NXP board, temporarily bypassing the PID lane-keeping
+data.
+
+Obstacle Avoidance (Reactive Logic):
+Handled directly by the NXP MCXA153. If the physical distance sensors detect an immediate
+blockage, the NXP triggers a hardware-level emergency stop, ignoring all UART
+movement commands from the ESP32-S3 until the path is clear.
+
+<<<END_PROJECT_IDEA>>>
+
+Output file:
+
+<<<OUTPUT_JSON_PATH>>>
+.agents/data/project_scoping_brief.json
+<<<END_OUTPUT_JSON_PATH>>>
+
+HTML output file:
+
+<<<OUTPUT_HTML_PATH>>>
+.agents/data/project_scoping_brief.html
+<<<END_OUTPUT_HTML_PATH>>>
+
+Generate the JSON scoping brief for Agent 1 and save it to the JSON output file.
+Also generate a self-contained HTML scoping report beside the JSON file.
+Create `.agents/data/` if needed.
+
+Remember:
+- The project must use the NXP FRDM-MCXA153 board.
+- Keep a core student version, a recommended version, and an advanced extension.
+- Do not invent exact pins or SDK APIs.
+- The JSON file content must be valid JSON only.
+- The HTML file must be self-contained and easy to open in a browser.

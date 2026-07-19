@@ -1,0 +1,33 @@
+Use `.agents/agent_2_project_documentation_markdown_generator.md`.
+
+This is the Agent 2: Project Documentation Markdown Generator prompt.
+
+Agent 0 JSON file:
+
+<<<SCOPING_JSON_FILE>>>
+.agents/data/project_scoping_brief.json
+<<<END_SCOPING_JSON_FILE>>>
+
+Agent 1 requirements HTML file:
+
+<<<REQUIREMENTS_HTML_FILE>>>
+.agents/data/requirements_report.html
+<<<END_REQUIREMENTS_HTML_FILE>>>
+
+Optional Agent 0 scoping HTML file:
+
+<<<SCOPING_HTML_FILE>>>
+.agents/data/project_scoping_brief.html
+<<<END_SCOPING_HTML_FILE>>>
+
+Output Markdown file:
+
+<<<OUTPUT_MARKDOWN_PATH>>>
+.agents/data/project_documentation.md
+<<<END_OUTPUT_MARKDOWN_PATH>>>
+
+Read the provided input files and generate the final project documentation Markdown file according to the Agent 2 prompt.
+
+Create or overwrite the output Markdown file.
+
+After writing the file, respond only with the output Markdown file path and a one-sentence status.

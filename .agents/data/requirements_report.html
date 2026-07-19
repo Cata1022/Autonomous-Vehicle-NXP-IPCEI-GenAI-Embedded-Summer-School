@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Requirements and Specification: Autonomous Car</title>
+<style>
+  :root {
+    --primary: #0369a1;
+    --primary-light: #e0f2fe;
+    --text-main: #1f2937;
+    --text-muted: #4b5563;
+    --bg-main: #f8fafc;
+    --bg-card: #ffffff;
+    --border: #e2e8f0;
+    --success: #15803d;
+    --warning: #b45309;
+    --danger: #b91c1c;
+  }
+  body {
+    font-family: system-ui, -apple-system, sans-serif;
+    line-height: 1.6;
+    color: var(--text-main);
+    background-color: var(--bg-main);
+    margin: 0;
+    padding: 2rem;
+  }
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: var(--bg-card);
+    padding: 2.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+  }
+  h1, h2, h3, h4 { color: var(--primary); }
+  h1 { border-bottom: 2px solid var(--primary-light); padding-bottom: 0.5rem; }
+  h2 { margin-top: 2.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+  .badge {
+    display: inline-block;
+    padding: 0.25rem 0.6rem;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .badge-core { background: var(--primary-light); color: var(--primary); }
+  .badge-rec { background: #fef3c7; color: var(--warning); }
+  .badge-adv { background: #fee2e2; color: var(--danger); }
+  .badge-success { background: #dcfce7; color: var(--success); }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: 0.95rem;
+  }
+  th, td {
+    text-align: left;
+    padding: 0.75rem;
+    border: 1px solid var(--border);
+  }
+  th { background-color: var(--bg-main); color: var(--text-main); }
+  tr:nth-child(even) { background-color: #f8fafc; }
+  ul, ol { padding-left: 1.5rem; }
+  .highlight { background-color: var(--primary-light); padding: 1rem; border-radius: 4px; border-left: 4px solid var(--primary); }
+  .checklist { list-style: none; padding-left: 0; }
+  .checklist li { margin-bottom: 0.5rem; }
+  .checklist input[type="checkbox"] { margin-right: 0.5rem; }
+  @media print {
+    body { background: white; padding: 0; }
+    .container { box-shadow: none; padding: 0; max-width: 100%; }
+    .badge { border: 1px solid var(--border); }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Requirements and Specification: Autonomous Car</h1>
+  <p><strong>Status:</strong> <span class="badge badge-success">READY FOR HUMAN REVIEW</span></p>
+  <p><strong>Date:</strong> Auto-generated</p>
+
+  <h2>1. Input Interpretation and Selected Scope</h2>
+  <div class="highlight">
+    <p><strong>Project Name:</strong> Autonomous Car</p>
+    <p><strong>Purpose:</strong> Demonstrate a distributed processing architecture for edge AI robotics by separating high-level computer vision and basic motor control.</p>
+    <p><strong>Target Board:</strong> NXP FRDM-MCXA153</p>
+    <p><strong>Intended User:</strong> Third-year Computer Science student</p>
+    <p><strong>Operating Environment:</strong> Controlled indoor environment with clear track markings and traffic signs.</p>
+    <p><strong>Selected Scope:</strong> Recommended (combines core motor/obstacle logic on NXP with UART vision commands from ESP32).</p>
+  </div>
+  <ul>
+    <li><strong>Facts from User:</strong> ESP32 handles vision/AI. NXP FRDM-MCXA153 handles PWM/steering. Ultrasonic/IR sensors connect directly to NXP. <strong>User explicitly clarified:</strong> The rover uses differential steering, and the motor driver is the L298N.</li>
+    <li><strong>Assumptions from Agent 0:</strong> Level shifting is not required for the ESP32 to NXP UART connection (both are 3.3V logic).</li>
+    <li><strong>Additional Assumptions from Agent 1:</strong> The L298N driver requires two PWM signals (ENA, ENB) and four GPIO direction signals (IN1-IN4). The ultrasonic sensor triggers an emergency halt if an object is closer than 15 cm.</li>
+    <li><strong>Human Approvals Needed:</strong> Power distribution logic (sharing ground, isolating motor noise), 5V ultrasonic sensor level-shifting requirements, battery choices.</li>
+  </ul>
+
+  <h2>2. Feature Tiers</h2>
+  <table>
+    <tr>
+      <th>Tier</th>
+      <th>Features</th>
+      <th>Main Risks & Needed Components</th>
+      <th>Student Suitability</th>
+    </tr>
+    <tr>
+      <td><span class="badge badge-core">Core</span></td>
+      <td>L298N differential drive motor control, ultrasonic obstacle avoidance via NXP FRDM-MCXA153. (Optional IR line tracking).</td>
+      <td><strong>Components:</strong> L298N, DC Motors, HC-SR04.<br><strong>Risks:</strong> 5V logic mismatch, brownouts.</td>
+      <td>Suitable (Beginner)</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-rec">Recommended</span></td>
+      <td>Camera-based lane tracking via ESP32, UART control loop between ESP32 and NXP.</td>
+      <td><strong>Components:</strong> ESP32-S3 CAM.<br><strong>Risks:</strong> UART message corruption.</td>
+      <td>Suitable (Intermediate)</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-adv">Advanced</span></td>
+      <td>TinyML traffic sign recognition on ESP32, priority-based command overrides.</td>
+      <td><strong>Risks:</strong> Dual-core task starvation on ESP32, TinyML training complexity.</td>
+      <td>Risky but Optional</td>
+    </tr>
+  </table>
+
+  <h2>3. Scenarios and User Stories</h2>
+  <ul>
+    <li><strong>SC-001 (Startup):</strong> The system powers on. The NXP initializes its PWM drivers for the L298N and establishes the UART listening port. The ESP32 boots and calibrates the camera.</li>
+    <li><strong>SC-002 (Normal Operation):</strong> The ESP32 tracks the lane and sends continuous UART commands indicating target speed and turn rate. The NXP translates these into left/right PWM duties for the L298N differential drive.</li>
+    <li><strong>SC-003 (Obstacle Avoidance):</strong> A hand is placed in front of the ultrasonic sensor. The NXP immediately halts the L298N (PWM = 0), ignoring ESP32 UART commands until the path is clear.</li>
+  </ul>
+  <p><strong>User Stories:</strong></p>
+  <ul>
+    <li><strong>US-001:</strong> As a student, I need the NXP FRDM-MCXA153 to handle bare-metal motor control so that the system reacts instantly to obstacles without waiting on the ESP32 vision loop.</li>
+    <li><strong>US-002:</strong> As a developer, I need to send differential drive commands over UART so that the computer vision logic on the ESP32 can steer the chassis.</li>
+  </ul>
+
+  <h2>4. Functional Requirements</h2>
+  <table>
+    <tr>
+      <th>ID</th>
+      <th>Tier</th>
+      <th>Requirement Statement</th>
+      <th>Priority</th>
+      <th>Verification</th>
+    </tr>
+    <tr>
+      <td>FR-001</td>
+      <td><span class="badge badge-core">Core</span></td>
+      <td>The system shall use the NXP FRDM-MCXA153 board as the main controller platform.</td>
+      <td>Must</td>
+      <td>Inspection</td>
+    </tr>
+    <tr>
+      <td>FR-002</td>
+      <td><span class="badge badge-core">Core</span></td>
+      <td>The system shall control two DC motors via an L298N motor driver using differential steering (2 PWM pins, 4 GPIO pins).</td>
+      <td>Must</td>
+      <td>Demonstration</td>
+    </tr>
+    <tr>
+      <td>FR-003</td>
+      <td><span class="badge badge-core">Core</span></td>
+      <td>When the ultrasonic sensor detects an obstacle closer than 15 cm (AI assumption), the system shall set motor PWM to 0.</td>
+      <td>Must</td>
+      <td>Test</td>
+    </tr>
+    <tr>
+      <td>FR-004</td>
+      <td><span class="badge badge-rec">Recommended</span></td>
+      <td>The system shall receive steering and speed targets via a UART interface from the ESP32.</td>
+      <td>Must</td>
+      <td>Test</td>
+    </tr>
+    <tr>
+      <td>FR-005</td>
+      <td><span class="badge badge-adv">Advanced</span></td>
+      <td>When a STOP override command is received via UART, the system shall halt motors for a configured duration.</td>
+      <td>Should</td>
+      <td>Test</td>
+    </tr>
+  </table>
+
+  <h2>5. Non-Functional Requirements</h2>
+  <table>
+    <tr>
+      <th>ID</th>
+      <th>Tier</th>
+      <th>Category</th>
+      <th>Requirement Statement</th>
+      <th>Risk if unmet</th>
+    </tr>
+    <tr>
+      <td>NFR-001</td>
+      <td><span class="badge badge-core">Core</span></td>
+      <td>Safety / HW</td>
+      <td>All external components connected to the FRDM-MCXA153 shall be electrically compatible with the board logic level (3.3V) and current limits, or shall use appropriate interface circuitry.</td>
+      <td>Hardware Damage</td>
+    </tr>
+    <tr>
+      <td>NFR-002</td>
+      <td><span class="badge badge-core">Core</span></td>
+      <td>Timing</td>
+      <td>The obstacle detection polling and response loop shall execute in under 50ms.</td>
+      <td>Collision</td>
+    </tr>
+    <tr>
+      <td>NFR-003</td>
+      <td><span class="badge badge-core">Core</span></td>
+      <td>Power</td>
+      <td>The L298N motor power rail shall be isolated from the logic power rail, sharing only a common ground.</td>
+      <td>MCU Brownout</td>
+    </tr>
+  </table>
+
+  <h2>6. Hardware Block Diagram Description</h2>
+  <p>The <strong>NXP FRDM-MCXA153</strong> serves as the central hub. It receives power from a step-down 3.3V/5V regulator connected to a 2S LiPo battery. The battery also directly supplies the VCC input of the <strong>L298N Motor Driver</strong>.</p>
+  <p>The NXP MCU drives the L298N using two PWM signals for speed (ENA, ENB) and four GPIOs for direction (IN1-IN4). An <strong>Ultrasonic Sensor (HC-SR04)</strong> connects to the NXP via GPIO (Trigger) and GPIO/Timer (Echo). <em>Note: If the HC-SR04 is 5V, a voltage divider is needed on the Echo pin before it reaches the 3.3V NXP input.</em></p>
+  <p>The <strong>ESP32-S3 CAM</strong> acts as an external peripheral. It communicates with the NXP solely via a 3.3V UART (TX/RX cross-connected). Both boards must share a common ground.</p>
+
+  <h2>7. Pin Allocation Draft</h2>
+  <table>
+    <tr>
+      <th>Component Signal</th>
+      <th>Tier</th>
+      <th>Required MCU Capability</th>
+      <th>Voltage</th>
+      <th>Interface</th>
+    </tr>
+    <tr>
+      <td>L298N ENA / ENB</td>
+      <td><span class="badge badge-core">Core</span></td>
+      <td>Generic PWM (2 channels)</td>
+      <td>3.3V Out</td>
+      <td>Output</td>
+    </tr>
+    <tr>
+      <td>L298N IN1 to IN4</td>
+      <td><span class="badge badge-core">Core</span></td>
+      <td>Generic GPIO (4 pins)</td>
+      <td>3.3V Out</td>
+      <td>Output</td>
+    </tr>
+    <tr>
+      <td>Ultrasonic Trigger</td>
+      <td><span class="badge badge-core">Core</span></td>
+      <td>Generic GPIO</td>
+      <td>3.3V Out</td>
+      <td>Output</td>
+    </tr>
+    <tr>
+      <td>Ultrasonic Echo</td>
+      <td><span class="badge badge-core">Core</span></td>
+      <td>Generic GPIO / Timer Capture</td>
+      <td>3.3V In</td>
+      <td>Input (Needs level shift if 5V)</td>
+    </tr>
+    <tr>
+      <td>ESP32 UART TX/RX</td>
+      <td><span class="badge badge-rec">Rec</span></td>
+      <td>Generic UART (RX/TX)</td>
+      <td>3.3V In/Out</td>
+      <td>UART</td>
+    </tr>
+  </table>
+
+  <h2>8. Firmware Architecture</h2>
+  <p><strong>Architecture Style:</strong> Bare-metal superloop with interrupt-driven UART.</p>
+  <ul>
+    <li><strong>Main Loop:</strong> Continuously triggers the ultrasonic sensor, measures the echo time to calculate distance, and updates the motor PWM duties. If the distance is below the safety threshold, it immediately forces PWM to zero.</li>
+    <li><strong>Interrupts (UART):</strong> The NXP listens to UART RX via interrupts. When a complete packet (e.g., speed and steering vector) is received from the ESP32, it updates global target variables.</li>
+    <li><strong>Motor Mixer Module:</strong> A dedicated function translates the target steering vector into independent left/right PWM values for differential steering, applying them only if the obstacle flag is clear.</li>
+  </ul>
+
+  <h2>9. Test Cases and Acceptance Criteria</h2>
+  <table>
+    <tr>
+      <th>ID</th>
+      <th>Requirement</th>
+      <th>Test Steps & Acceptance Criteria</th>
+      <th>Evidence</th>
+    </tr>
+    <tr>
+      <td>TC-001</td>
+      <td>FR-001</td>
+      <td><strong>Steps:</strong> Inspect the assembled rover. <strong>Criterion:</strong> The NXP FRDM-MCXA153 is the primary execution board controlling the L298N.</td>
+      <td>Photo</td>
+    </tr>
+    <tr>
+      <td>TC-002</td>
+      <td>FR-002</td>
+      <td><strong>Steps:</strong> Send forward, left, and right commands in software. <strong>Criterion:</strong> Motors spin in correct directions for differential drive.</td>
+      <td>Video/Observation</td>
+    </tr>
+    <tr>
+      <td>TC-003</td>
+      <td>FR-003</td>
+      <td><strong>Steps:</strong> Place rover on blocks. Run motors. Place an object 10cm from the ultrasonic sensor. <strong>Criterion:</strong> Motors stop immediately.</td>
+      <td>Video/Observation</td>
+    </tr>
+    <tr>
+      <td>TC-004</td>
+      <td>FR-004</td>
+      <td><strong>Steps:</strong> Send UART command from ESP32. <strong>Criterion:</strong> NXP MCU correctly parses speed/direction and adjusts L298N PWM.</td>
+      <td>Serial Log / Oscilloscope</td>
+    </tr>
+  </table>
+
+  <h2>10. Traceability Matrix</h2>
+  <p>US-001 &rarr; FR-001 &rarr; TC-001 (Must - Covered)<br>
+     US-001 &rarr; FR-003 &rarr; TC-003 (Must - Covered)<br>
+     US-002 &rarr; FR-002 &rarr; TC-002 (Must - Covered)<br>
+     US-002 &rarr; FR-004 &rarr; TC-004 (Must - Covered)</p>
+
+  <h2>11. Assumptions and Risk Register</h2>
+  <table>
+    <tr>
+      <th>ID</th>
+      <th>Type</th>
+      <th>Description / Impact</th>
+      <th>Mitigation</th>
+    </tr>
+    <tr>
+      <td>R-001</td>
+      <td>Voltage Risk</td>
+      <td>5V Echo signal from HC-SR04 destroying 3.3V NXP GPIO pin. (High)</td>
+      <td>Ensure students build a voltage divider on the breadboard or use 3.3V-compatible HC-SR04+.</td>
+    </tr>
+    <tr>
+      <td>R-002</td>
+      <td>Power Risk</td>
+      <td>Motor stall current pulling battery voltage down, resetting MCUs. (Medium)</td>
+      <td>Use adequate battery (LiPo) and proper decoupling capacitors. Separate logic and motor rails.</td>
+    </tr>
+    <tr>
+      <td>A-001</td>
+      <td>AI Assumption</td>
+      <td>Ultrasonic halt threshold is set to 15 cm.</td>
+      <td>Can be tuned in software later.</td>
+    </tr>
+  </table>
+
+  <h2>12. Human Review Checklist</h2>
+  <ul class="checklist">
+    <li><input type="checkbox"> Scope approved (Recommended level).</li>
+    <li><input type="checkbox"> FRDM-MCXA153 confirmed as mandatory board.</li>
+    <li><input type="checkbox"> L298N Differential drive architecture approved.</li>
+    <li><input type="checkbox"> Voltage compatibility checked (Level shifting for Echo pin addressed).</li>
+    <li><input type="checkbox"> Power budget checked (Battery &rarr; Motors &amp; MCUs).</li>
+    <li><input type="checkbox"> Firmware architecture (bare-metal superloop + UART ISR) approved.</li>
+    <li><input type="checkbox"> Implementation allowed to start.</li>
+  </ul>
+
+  <h2>13. Final Status</h2>
+  <div class="highlight" style="border-left-color: var(--success);">
+    <h3>READY FOR HUMAN REVIEW</h3>
+    <ul>
+      <li>The core hardware topology has been fully mapped, accounting for the user's specification of differential steering and the L298N driver.</li>
+      <li>Clear separation between the ESP32 (vision/UART) and NXP FRDM-MCXA153 (bare-metal motor control) is defined.</li>
+      <li>Hardware risks regarding power sharing and 5V sensor logic levels have been highlighted and mitigated.</li>
+    </ul>
+  </div>
+
+</div>
+</body>
+</html>
