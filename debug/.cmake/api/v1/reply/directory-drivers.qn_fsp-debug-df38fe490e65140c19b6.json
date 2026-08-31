@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "drivers/qn_fsp",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/drivers/qn_fsp"
+	}
+}

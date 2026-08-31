@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "examples/_boards/frdmmcxa153",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/examples/_boards/frdmmcxa153"
+	}
+}

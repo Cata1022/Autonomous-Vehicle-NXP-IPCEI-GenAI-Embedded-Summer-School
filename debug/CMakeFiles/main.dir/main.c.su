@@ -1,0 +1,12 @@
+D:/nxp/mcuxsdk/mcuxsdk/arch/arm/CMSIS/Core/Include/core_cm33.h:2358:22:__NVIC_EnableIRQ	16	static
+D:/nxp/mcuxsdk/mcuxsdk/arch/arm/CMSIS/Core/Include/core_cm33.h:2555:22:__NVIC_SetPriority	16	static
+D:/nxp/mcuxsdk/mcuxsdk/arch/arm/CMSIS/Core/Include/core_cm33.h:3108:26:SysTick_Config	16	static
+D:/nxp/mcuxsdk/mcuxsdk/drivers/common/fsl_common_arm.h:753:24:EnableIRQ	24	static
+D:/nxp/mcuxsdk/mcuxsdk/drivers/lpuart/fsl_lpuart.h:552:20:LPUART_SetRxFifoWatermark	16	static
+D:/nxp/mcuxsdk/mcuxsdk/drivers/lpuart/fsl_lpuart.h:827:23:LPUART_ReadByte	32	static
+C:/Users/Catalin/Desktop/autonomous_vehicle/main.c:24:6:LPUART1_IRQHandler	16	static
+C:/Users/Catalin/Desktop/autonomous_vehicle/main.c:42:6:LPUART0_SignalEvent	16	static
+C:/Users/Catalin/Desktop/autonomous_vehicle/main.c:47:6:SysTick_Handler	8	static
+C:/Users/Catalin/Desktop/autonomous_vehicle/main.c:55:6:InitHardware	8	static
+C:/Users/Catalin/Desktop/autonomous_vehicle/main.c:77:6:ProcessUart	80	static
+C:/Users/Catalin/Desktop/autonomous_vehicle/main.c:148:5:main	8	static

@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "rtos/freertos/coremqtt",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/rtos/freertos/coremqtt"
+	}
+}

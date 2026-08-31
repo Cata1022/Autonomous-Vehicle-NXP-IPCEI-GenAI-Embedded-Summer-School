@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "drivers/capt",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/drivers/capt"
+	}
+}

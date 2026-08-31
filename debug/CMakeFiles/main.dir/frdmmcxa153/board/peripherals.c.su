@@ -1,0 +1,7 @@
+D:/nxp/mcuxsdk/mcuxsdk/drivers/pwm/fsl_pwm.h:1310:20:PWM_SetupFaultDisableMap	24	static
+C:/Users/Catalin/Desktop/autonomous_vehicle/frdmmcxa153/board/peripherals.c:126:10:LPUART0_GetFreq	4	static
+C:/Users/Catalin/Desktop/autonomous_vehicle/frdmmcxa153/board/peripherals.c:130:13:LPUART0_init	8	static
+C:/Users/Catalin/Desktop/autonomous_vehicle/frdmmcxa153/board/peripherals.c:542:13:FLEXPWM0_init	24	static
+C:/Users/Catalin/Desktop/autonomous_vehicle/frdmmcxa153/board/peripherals.c:656:13:LPUART1_init	8	static
+C:/Users/Catalin/Desktop/autonomous_vehicle/frdmmcxa153/board/peripherals.c:663:6:BOARD_InitPeripherals	8	static
+C:/Users/Catalin/Desktop/autonomous_vehicle/frdmmcxa153/board/peripherals.c:674:6:BOARD_InitBootPeripherals	8	static

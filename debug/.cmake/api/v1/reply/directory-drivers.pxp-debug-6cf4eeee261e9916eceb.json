@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "drivers/pxp",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/drivers/pxp"
+	}
+}

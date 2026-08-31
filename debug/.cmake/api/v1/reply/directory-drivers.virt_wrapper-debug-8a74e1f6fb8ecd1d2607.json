@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "drivers/virt_wrapper",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/drivers/virt_wrapper"
+	}
+}

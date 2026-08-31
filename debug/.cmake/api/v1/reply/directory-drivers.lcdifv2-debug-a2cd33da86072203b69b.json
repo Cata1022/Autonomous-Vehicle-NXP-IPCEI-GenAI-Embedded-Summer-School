@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "drivers/lcdifv2",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/drivers/lcdifv2"
+	}
+}

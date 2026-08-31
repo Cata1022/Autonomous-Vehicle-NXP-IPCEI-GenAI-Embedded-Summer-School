@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "components/timer_lptmr",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/components/timer_lptmr"
+	}
+}

@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "drivers/igf",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/drivers/igf"
+	}
+}

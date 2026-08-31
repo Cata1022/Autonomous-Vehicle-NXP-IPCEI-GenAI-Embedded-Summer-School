@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "drivers/asrc",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/drivers/asrc"
+	}
+}

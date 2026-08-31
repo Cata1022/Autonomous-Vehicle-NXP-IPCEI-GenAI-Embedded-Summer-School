@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "devices/MCX/MCXA/MCXA153/drivers/romapi",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/devices/MCX/MCXA/MCXA153/drivers/romapi"
+	}
+}

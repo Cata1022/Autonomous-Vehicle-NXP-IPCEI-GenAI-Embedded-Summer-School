@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "components/i2c",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/components/i2c"
+	}
+}

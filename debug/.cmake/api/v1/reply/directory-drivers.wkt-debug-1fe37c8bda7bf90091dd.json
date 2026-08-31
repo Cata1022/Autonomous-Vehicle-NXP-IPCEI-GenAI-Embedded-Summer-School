@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "drivers/wkt",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/drivers/wkt"
+	}
+}

@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "drivers/bee",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/drivers/bee"
+	}
+}

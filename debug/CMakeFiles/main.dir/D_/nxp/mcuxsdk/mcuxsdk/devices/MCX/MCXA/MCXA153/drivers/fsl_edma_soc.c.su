@@ -1,0 +1,4 @@
+D:/nxp/mcuxsdk/mcuxsdk/devices/MCX/MCXA/MCXA153/drivers/fsl_edma_soc.c:35:6:DMA_CH0_DriverIRQHandler	8	static
+D:/nxp/mcuxsdk/mcuxsdk/devices/MCX/MCXA/MCXA153/drivers/fsl_edma_soc.c:45:6:DMA_CH1_DriverIRQHandler	8	static
+D:/nxp/mcuxsdk/mcuxsdk/devices/MCX/MCXA/MCXA153/drivers/fsl_edma_soc.c:55:6:DMA_CH2_DriverIRQHandler	8	static
+D:/nxp/mcuxsdk/mcuxsdk/devices/MCX/MCXA/MCXA153/drivers/fsl_edma_soc.c:65:6:DMA_CH3_DriverIRQHandler	8	static

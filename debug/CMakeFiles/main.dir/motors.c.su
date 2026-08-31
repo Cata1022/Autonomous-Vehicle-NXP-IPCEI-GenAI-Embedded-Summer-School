@@ -1,0 +1,4 @@
+D:/nxp/mcuxsdk/mcuxsdk/drivers/pwm/fsl_pwm.h:1243:20:PWM_SetPwmLdok	16	static
+C:/Users/Catalin/Desktop/autonomous_vehicle/motors.c:6:6:Motors_InitHardware	8	static
+C:/Users/Catalin/Desktop/autonomous_vehicle/motors.c:12:6:SetLeftMotorSpeed	32	static
+C:/Users/Catalin/Desktop/autonomous_vehicle/motors.c:30:6:SetRightMotorSpeed	32	static

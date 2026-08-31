@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "drivers/xrdc",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/drivers/xrdc"
+	}
+}

@@ -6,7 +6,7 @@
       "request": "launch",
       "cwd": "${workspaceFolder}",
       "executable": {
-        "elf": ""
+        "elf": "${workspaceFolder}/debug/main.elf"
       },
       "stopAtSymbol": "main",
       "probeSerialNumber": "",
@@ -18,11 +18,14 @@
         "set non-stop off"
       ],
       "gdbServerConfigs": {
-        "linkserver": {},
+        "linkserver": {
+          "device": "MCXA153:FRDM-MCXA153",
+          "connectReset": true
+        },
         "segger": {},
         "pemicro": {}
       },
-      "showDevDebugOutput": "none"
+      "showDevDebugOutput": "parsed"
     }
   ]
 }

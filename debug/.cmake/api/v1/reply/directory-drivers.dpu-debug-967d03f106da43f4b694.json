@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "drivers/dpu",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/drivers/dpu"
+	}
+}

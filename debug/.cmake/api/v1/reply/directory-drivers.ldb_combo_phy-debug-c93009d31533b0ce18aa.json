@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "drivers/ldb_combo_phy",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/drivers/ldb_combo_phy"
+	}
+}

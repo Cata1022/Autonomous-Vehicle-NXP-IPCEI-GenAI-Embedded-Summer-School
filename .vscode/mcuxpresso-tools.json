@@ -5,10 +5,9 @@
   "trustZoneType": "none",
   "multicoreType": "none",
   "projectType": "sdk-v2-freestanding",
-  "projectName": "new",
   "sdk": {
-    "version": "26.6.0.0",
-    "path": "c:\\WORKSPACE\\proiecte\\ipcei-lab\\src\\sdks\\mcuxsdk\\mcuxsdk",
+    "path": "d:\\nxp\\mcuxsdk",
+    "version": "26.6.0",
     "boardId": "frdmmcxa153",
     "deviceId": "MCXA153",
     "coreId": "cm33_core0"

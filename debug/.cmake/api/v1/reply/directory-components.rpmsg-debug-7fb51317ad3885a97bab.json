@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "components/rpmsg",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/components/rpmsg"
+	}
+}

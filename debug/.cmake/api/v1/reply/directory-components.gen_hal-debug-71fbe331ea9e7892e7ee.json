@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "components/gen_hal",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/components/gen_hal"
+	}
+}

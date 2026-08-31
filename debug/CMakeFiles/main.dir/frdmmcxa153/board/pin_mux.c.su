@@ -1,0 +1,5 @@
+D:/nxp/mcuxsdk/mcuxsdk/devices/MCX/MCXA/MCXA153/drivers/fsl_clock.h:539:20:CLOCK_EnableClock	32	static
+D:/nxp/mcuxsdk/mcuxsdk/devices/MCX/MCXA/MCXA153/drivers/fsl_reset.h:204:20:RESET_ReleasePeripheralReset	16	static
+D:/nxp/mcuxsdk/mcuxsdk/drivers/port/fsl_port.h:463:20:PORT_SetPinMux	24	static
+C:/Users/Catalin/Desktop/autonomous_vehicle/frdmmcxa153/board/pin_mux.c:47:6:BOARD_InitBootPins	8	static
+C:/Users/Catalin/Desktop/autonomous_vehicle/frdmmcxa153/board/pin_mux.c:87:6:BOARD_InitPins	32	static

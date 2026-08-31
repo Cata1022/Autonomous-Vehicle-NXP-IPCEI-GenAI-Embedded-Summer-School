@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "drivers/sramc",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/drivers/sramc"
+	}
+}

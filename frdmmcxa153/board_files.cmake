@@ -1,4 +1,3 @@
-
 # Copyright 2026 NXP
 #
 # SPDX-License-Identifier: BSD-3-Clause
@@ -8,10 +7,11 @@ mcux_add_configuration(
     CX "-DSDK_DEBUGCONSOLE=1"
 )
 
-
 mcux_add_source(
     SOURCES board/board.c
             board/board.h
+            board/FreeRTOSConfigBoard.h
+            board/se_board_config.h
 )
 
 mcux_add_include(
@@ -39,6 +39,7 @@ mcux_add_include(
 mcux_add_source(
     SOURCES board/peripherals.c
             board/peripherals.h
+            board/RTE_Device.h
 )
 
 mcux_add_include(
@@ -53,3 +54,4 @@ mcux_add_source(
 mcux_add_include(
     INCLUDES app
 )
+

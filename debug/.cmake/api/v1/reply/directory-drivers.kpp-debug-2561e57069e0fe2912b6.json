@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "drivers/kpp",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/drivers/kpp"
+	}
+}

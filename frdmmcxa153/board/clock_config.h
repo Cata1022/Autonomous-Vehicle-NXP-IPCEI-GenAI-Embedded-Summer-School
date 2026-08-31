@@ -39,7 +39,7 @@ void BOARD_InitBootClocks(void);
 #define BOARD_BOOTCLOCKFRO12M_CORE_CLOCK           12000000U  /*!< Core clock frequency: 12000000Hz */
 
 /* Clock outputs (values are in Hz): */
-#define BOARD_BOOTCLOCKFRO12M_ADC0_CLOCK              12000000UL     /* Clock consumers of ADC0_clock output : ADC0 */
+#define BOARD_BOOTCLOCKFRO12M_ADC0_CLOCK              0UL            /* Clock consumers of ADC0_clock output : ADC0 */
 #define BOARD_BOOTCLOCKFRO12M_CLK16K_0_CLOCK          0UL            /* Clock consumers of CLK16K_0_clock output : CMP0, WAKETIMER0, WUU0 */
 #define BOARD_BOOTCLOCKFRO12M_CLK16K_1_CLOCK          0UL            /* Clock consumers of CLK16K_1_clock output : CMP1, LPTMR0, WAKETIMER0 */
 #define BOARD_BOOTCLOCKFRO12M_CLKOUT_CLOCK            0UL            /* Clock consumers of CLKOUT_clock output : N/A */
@@ -51,7 +51,7 @@ void BOARD_InitBootClocks(void);
 #define BOARD_BOOTCLOCKFRO12M_CMP1FDIV_CLOCK          0UL            /* Clock consumers of CMP1FDIV_clock output : CMP1 */
 #define BOARD_BOOTCLOCKFRO12M_CMP1RRDIV_CLOCK         0UL            /* Clock consumers of CMP1RRDIV_clock output : CMP1 */
 #define BOARD_BOOTCLOCKFRO12M_CPU_CLOCK               12000000UL     /* Clock consumers of CPU_clock output : N/A */
-#define BOARD_BOOTCLOCKFRO12M_CTIMER0_CLOCK           48000000UL     /* Clock consumers of CTIMER0_clock output : CTIMER0 */
+#define BOARD_BOOTCLOCKFRO12M_CTIMER0_CLOCK           0UL            /* Clock consumers of CTIMER0_clock output : CTIMER0 */
 #define BOARD_BOOTCLOCKFRO12M_CTIMER1_CLOCK           0UL            /* Clock consumers of CTIMER1_clock output : CTIMER1 */
 #define BOARD_BOOTCLOCKFRO12M_CTIMER2_CLOCK           0UL            /* Clock consumers of CTIMER2_clock output : CTIMER2 */
 #define BOARD_BOOTCLOCKFRO12M_FREQME_REFERENCE_CLOCK  12000000UL     /* Clock consumers of FREQME_reference_clock output : FREQME0 */
@@ -62,12 +62,12 @@ void BOARD_InitBootClocks(void);
 #define BOARD_BOOTCLOCKFRO12M_I3C_FCLK_CLOCK          0UL            /* Clock consumers of I3C_FCLK_clock output : I3C0 */
 #define BOARD_BOOTCLOCKFRO12M_I3C_SLOW_TC_CLOCK       0UL            /* Clock consumers of I3C_SLOW_TC_clock output : I3C0 */
 #define BOARD_BOOTCLOCKFRO12M_I3C_SLOW_CLOCK          0UL            /* Clock consumers of I3C_SLOW_clock output : I3C0 */
-#define BOARD_BOOTCLOCKFRO12M_LPI2C0_CLOCK            12000000UL     /* Clock consumers of LPI2C0_clock output : LPI2C0 */
+#define BOARD_BOOTCLOCKFRO12M_LPI2C0_CLOCK            0UL            /* Clock consumers of LPI2C0_clock output : LPI2C0 */
 #define BOARD_BOOTCLOCKFRO12M_LPSPI0_CLOCK            0UL            /* Clock consumers of LPSPI0_clock output : LPSPI0 */
 #define BOARD_BOOTCLOCKFRO12M_LPSPI1_CLOCK            0UL            /* Clock consumers of LPSPI1_clock output : LPSPI1 */
 #define BOARD_BOOTCLOCKFRO12M_LPTMR0_CLOCK            0UL            /* Clock consumers of LPTMR0_clock output : LPTMR0 */
 #define BOARD_BOOTCLOCKFRO12M_LPUART0_CLOCK           48000000UL     /* Clock consumers of LPUART0_clock output : LPUART0 */
-#define BOARD_BOOTCLOCKFRO12M_LPUART1_CLOCK           0UL            /* Clock consumers of LPUART1_clock output : LPUART1 */
+#define BOARD_BOOTCLOCKFRO12M_LPUART1_CLOCK           48000000UL     /* Clock consumers of LPUART1_clock output : LPUART1 */
 #define BOARD_BOOTCLOCKFRO12M_LPUART2_CLOCK           0UL            /* Clock consumers of LPUART2_clock output : LPUART2 */
 #define BOARD_BOOTCLOCKFRO12M_MAIN_CLOCK              12000000UL     /* Clock consumers of MAIN_clock output : FLEXPWM0 */
 #define BOARD_BOOTCLOCKFRO12M_OSTIMER_CLOCK           0UL            /* Clock consumers of OSTIMER_clock output : OSTIMER0 */

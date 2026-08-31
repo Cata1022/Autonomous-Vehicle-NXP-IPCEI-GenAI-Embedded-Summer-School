@@ -39,7 +39,7 @@ void BOARD_InitBootClocks(void);
 #define BOARD_BOOTCLOCKFRO12M_CORE_CLOCK           12000000U  /*!< Core clock frequency: 12000000Hz */
 
 /* Clock outputs (values are in Hz): */
-#define BOARD_BOOTCLOCKFRO12M_ADC0_CLOCK              12000000UL     /* Clock consumers of ADC0_clock output : ADC0 */
+#define BOARD_BOOTCLOCKFRO12M_ADC0_CLOCK              0UL            /* Clock consumers of ADC0_clock output : ADC0 */
 #define BOARD_BOOTCLOCKFRO12M_CLK16K_0_CLOCK          0UL            /* Clock consumers of CLK16K_0_clock output : CMP0, WAKETIMER0, WUU0 */
 #define BOARD_BOOTCLOCKFRO12M_CLK16K_1_CLOCK          0UL            /* Clock consumers of CLK16K_1_clock output : CMP1, LPTMR0, WAKETIMER0 */
 #define BOARD_BOOTCLOCKFRO12M_CLKOUT_CLOCK            0UL            /* Clock consumers of CLKOUT_clock output : N/A */
@@ -51,7 +51,7 @@ void BOARD_InitBootClocks(void);
 #define BOARD_BOOTCLOCKFRO12M_CMP1FDIV_CLOCK          0UL            /* Clock consumers of CMP1FDIV_clock output : CMP1 */
 #define BOARD_BOOTCLOCKFRO12M_CMP1RRDIV_CLOCK         0UL            /* Clock consumers of CMP1RRDIV_clock output : CMP1 */
 #define BOARD_BOOTCLOCKFRO12M_CPU_CLOCK               12000000UL     /* Clock consumers of CPU_clock output : N/A */
-#define BOARD_BOOTCLOCKFRO12M_CTIMER0_CLOCK           48000000UL     /* Clock consumers of CTIMER0_clock output : CTIMER0 */
+#define BOARD_BOOTCLOCKFRO12M_CTIMER0_CLOCK           0UL            /* Clock consumers of CTIMER0_clock output : CTIMER0 */
 #define BOARD_BOOTCLOCKFRO12M_CTIMER1_CLOCK           0UL            /* Clock consumers of CTIMER1_clock output : CTIMER1 */
 #define BOARD_BOOTCLOCKFRO12M_CTIMER2_CLOCK           0UL            /* Clock consumers of CTIMER2_clock output : CTIMER2 */
 #define BOARD_BOOTCLOCKFRO12M_FREQME_REFERENCE_CLOCK  12000000UL     /* Clock consumers of FREQME_reference_clock output : FREQME0 */

@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "components/display",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/components/display"
+	}
+}

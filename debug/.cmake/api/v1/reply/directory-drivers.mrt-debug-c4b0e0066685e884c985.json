@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "drivers/mrt",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/drivers/mrt"
+	}
+}

@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "middleware/vglite/vglite_sdk",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/middleware/vglite/vglite_sdk"
+	}
+}

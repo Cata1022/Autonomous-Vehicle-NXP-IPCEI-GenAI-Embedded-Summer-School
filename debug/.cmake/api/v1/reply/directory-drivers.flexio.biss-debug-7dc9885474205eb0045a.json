@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "drivers/flexio/biss",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/drivers/flexio/biss"
+	}
+}

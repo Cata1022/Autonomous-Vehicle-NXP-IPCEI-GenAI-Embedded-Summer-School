@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "cmake/extension/reports",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/cmake/extension/reports"
+	}
+}

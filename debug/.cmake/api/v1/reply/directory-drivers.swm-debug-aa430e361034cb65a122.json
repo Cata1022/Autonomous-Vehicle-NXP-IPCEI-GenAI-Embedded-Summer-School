@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "drivers/swm",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/drivers/swm"
+	}
+}

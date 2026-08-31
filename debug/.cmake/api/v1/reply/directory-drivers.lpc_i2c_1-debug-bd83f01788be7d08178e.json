@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "drivers/lpc_i2c_1",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/drivers/lpc_i2c_1"
+	}
+}

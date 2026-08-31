@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "components/srtm/services",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/components/srtm/services"
+	}
+}

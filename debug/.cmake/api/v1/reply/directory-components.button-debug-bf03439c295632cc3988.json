@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "components/button",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/components/button"
+	}
+}

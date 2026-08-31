@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "drivers/tenbaset_phy",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/drivers/tenbaset_phy"
+	}
+}

@@ -10,7 +10,7 @@ product: Peripherals v15.0
 processor: MCXA153
 package_id: MCXA153VLH
 mcu_data: ksdk2_0
-processor_version: 26.03.20
+processor_version: 26.06.20
 functionalGroups:
 - name: BOARD_InitPeripherals
   UUID: 9c69b39f-9abc-4e8a-8540-8e1714f5fb00
@@ -33,6 +33,8 @@ component:
 - type: 'uart_cmsis_common'
 - type_id: 'uart_cmsis_common_9cb8e302497aa696fdbb5a4fd622c2a8'
 - global_USART_CMSIS_common:
+  - commonSetting:
+    - USART_RX_BUFFER_LEN: '64'
   - quick_selection: 'default'
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 
@@ -70,7 +72,6 @@ instance:
   - nvic:
     - interrupt_table:
       - 0: []
-      - 1: []
     - interrupts: []
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 /* clang-format on */
@@ -80,106 +81,63 @@ static void NVIC_init(void) {
 } */
 
 /***********************************************************************************************************************
- * SysTick initialization code
- **********************************************************************************************************************/
-/* clang-format off */
-/* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
-instance:
-- name: 'SysTick'
-- type: 'systick'
-- mode: 'GENERAL'
-- custom_name_enabled: 'false'
-- type_id: 'systick'
-- functional_group: 'BOARD_InitPeripherals'
-- peripheral: 'SysTick'
-- config_sets:
-  - fsl_systick:
-    - timingConfig:
-      - clockSource: 'ProcessorClock'
-      - clockSourceFreq: 'custom:12000000'
-      - reload: '0.01s'
-    - interrupt:
-      - IRQn: 'SysTick_IRQn'
-      - enable_custom_name: 'true'
-      - handler_custom_name: 'SysTick_Handler'
- * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
-/* clang-format on */
-
-static void SysTick_init(void) {
-  /* Initialize the systick module. */
-  SysTick->LOAD = (uint32_t)(SYSTICK_TICKS - 1UL);
-  SysTick->VAL = 0UL;
-  SysTick->CTRL = SysTick_CTRL_CLKSOURCE_Msk | SysTick_CTRL_TICKINT_Msk | SysTick_CTRL_ENABLE_Msk;
-}
-
-/***********************************************************************************************************************
  * LPUART0 initialization code
  **********************************************************************************************************************/
 /* clang-format off */
 /* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
 instance:
 - name: 'LPUART0'
-- type: 'lpuart'
-- mode: 'polling'
+- type: 'lpuart_cmsis'
+- mode: 'interrupt'
 - custom_name_enabled: 'false'
-- type_id: 'lpuart_2.11.0'
+- type_id: 'lpuart_cmsis_2.4.0'
 - functional_group: 'BOARD_InitPeripherals'
 - peripheral: 'LPUART0'
 - config_sets:
-  - lpuartConfig_t:
-    - lpuartConfig:
+  - general:
+    - main_config:
+      - operationMode: 'ARM_USART_MODE_ASYNCHRONOUS'
       - clockSource: 'LpuartClock'
-      - lpuartSrcClkFreq: 'ClocksTool_DefaultInit'
+      - clockSourceFreq: 'BOARD_BootClockFRO12M'
+      - power_state: 'ARM_POWER_FULL'
       - baudRate_Bps: '115200'
-      - parityMode: 'kLPUART_ParityDisabled'
-      - dataBitsCount: 'kLPUART_EightDataBits'
-      - isMsb: 'false'
-      - stopBitCount: 'kLPUART_OneStopBit'
-      - enableMatchAddress1: 'false'
-      - matchAddress1: '0'
-      - enableMatchAddress2: 'false'
-      - matchAddress2: '0'
-      - txFifoWatermark: '0'
-      - rxFifoWatermark: '1'
-      - enableRxRTS: 'false'
-      - enableTxRTS: 'false'
-      - enableTxCTS: 'false'
-      - txCtsSource: 'kLPUART_CtsSourcePin'
-      - txCtsConfig: 'kLPUART_CtsSampleAtStart'
-      - txRtsPolarity: 'kLPUART_RtsPolarityLow'
-      - rtsWatermark: '0'
-      - rxIdleType: 'kLPUART_IdleTypeStartBit'
-      - rxIdleConfig: 'kLPUART_IdleCharacter1'
-      - enableTx: 'true'
-      - enableRx: 'true'
-      - inverseTxd: 'false'
-    - quick_selection: 'QuickSelection1'
+      - dataBits: 'ARM_USART_DATA_BITS_8'
+      - parityBit: 'ARM_USART_PARITY_NONE'
+      - stopBit: 'ARM_USART_STOP_BITS_1'
+      - enableRX: 'false'
+      - enableRXBuffer: 'true'
+      - enableTX: 'false'
+      - signalEventFunctionId: 'LPUART0_SignalEvent'
+      - enableGetFreqFnCustomName: 'false'
+      - getFreqFunctionCustomID: 'LPUART0_GetFreq'
+      - enableInitPinsFnCustomName: 'false'
+      - initPinFunctionCustomID: 'LPUART0_InitPins'
+      - enableDeinitPinsFnCustomName: 'false'
+      - deinitPinFunctionCustomID: 'LPUART0_DeinitPins'
+  - fsl_cmsis_uart:
+    - interrupt:
+      - IRQn: 'LPUART0_IRQn'
+      - enable_priority: 'false'
+      - priority: '0'
+    - quick_selection: 'default_edma'
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 /* clang-format on */
-const lpuart_config_t LPUART0_config = {
-  .baudRate_Bps = 115200UL,
-  .parityMode = kLPUART_ParityDisabled,
-  .dataBitsCount = kLPUART_EightDataBits,
-  .isMsb = false,
-  .stopBitCount = kLPUART_OneStopBit,
-  .txFifoWatermark = 0U,
-  .rxFifoWatermark = 1U,
-  .enableRxRTS = false,
-  .enableTxRTS = false,
-  .enableTxCTS = false,
-  .txCtsSource = kLPUART_CtsSourcePin,
-  .txCtsConfig = kLPUART_CtsSampleAtStart,
-  .txRtsPolarity = kLPUART_RtsPolarityLow,
-  .rtsWatermark = 0U,
-  .rxIdleType = kLPUART_IdleTypeStartBit,
-  .rxIdleConfig = kLPUART_IdleCharacter1,
-  .enableTx = true,
-  .enableRx = true,
-  .inverseTxd = false
+/* Get clock source frequency */
+uint32_t LPUART0_GetFreq(void){
+  return LPUART0_CLOCK_SOURCE_FREQ;
 };
 
 static void LPUART0_init(void) {
-  LPUART_Init(LPUART0_PERIPHERAL, &LPUART0_config, LPUART0_CLOCK_SOURCE);
+  /* Initialize CMSIS USART */
+  LPUART0_PERIPHERAL.Initialize(LPUART0_SignalEvent);
+  /* Power control of CMSIS USART */
+  LPUART0_PERIPHERAL.PowerControl(ARM_POWER_FULL);
+  /* Control of CMSIS USART */
+  LPUART0_PERIPHERAL.Control(ARM_USART_MODE_ASYNCHRONOUS | ARM_USART_DATA_BITS_8 | ARM_USART_PARITY_NONE | ARM_USART_STOP_BITS_1, 115200);
+  /* Enable or disable receiver. */
+  LPUART0_PERIPHERAL.Control(ARM_USART_CONTROL_RX , 0);
+  /* Enable or disable transmitter. */
+  LPUART0_PERIPHERAL.Control(ARM_USART_CONTROL_TX , 0);
 }
 
 /***********************************************************************************************************************
@@ -208,7 +166,7 @@ instance:
           - prescale: 'kPWM_Prescale_Divide_1'
           - pwmFreq: '1 kHz'
           - pairOperation: 'kPWM_Independent'
-          - operationMode: 'kPWM_SignedCenterAligned'
+          - operationMode: 'kPWM_SignedEdgeAligned'
           - initializationControl: 'kPWM_Initialize_LocalSync'
           - reloadLogic: 'kPWM_ReloadImmediate'
           - reloadSelect: 'kPWM_LocalReload'
@@ -217,8 +175,8 @@ instance:
           - enableDebugMode: 'false'
           - enableWait: 'false'
           - outputTrigger_sel: ''
-          - loadOK: 'true'
-          - startCounter: 'true'
+          - loadOK: 'false'
+          - startCounter: 'false'
           - interrupt_sel: ''
           - dma_used: 'false'
           - dma:
@@ -243,13 +201,161 @@ instance:
               - interrupt_sel: ''
           - 1:
             - channel_id: 'B'
-            - functionSel: 'notUsed'
+            - functionSel: 'pwmOutput'
+            - pwm:
+              - dutyCyclePercent: '50'
+              - level: 'kPWM_HighTrue'
+              - fault_channel0:
+                - dismap: ''
+                - quick_selection: 'default'
+              - faultState: 'kPWM_PwmFaultState0'
+              - pwmchannelenable: 'true'
+              - deadtime_input_by_force: 'kPWM_UsePwm'
+              - clockSource: 'kPWM_BusClock'
+              - deadtimeValue: '0'
+              - interrupt_sel: ''
           - 2:
             - channel_id: 'X'
             - functionSel: 'notUsed'
         - common_interruptEn: 'false'
         - common_interrupt:
           - IRQn: 'FLEXPWM0_SUBMODULE0_IRQn'
+          - enable_interrrupt: 'enabled'
+          - enable_priority: 'false'
+          - priority: '0'
+          - enable_custom_name: 'false'
+      - 1:
+        - sm: 'kPWM_Module_1'
+        - sm_id: 'SM1'
+        - config:
+          - clockSource: 'kPWM_BusClock'
+          - prescale: 'kPWM_Prescale_Divide_1'
+          - pwmFreq: '16 kHz'
+          - pairOperation: 'kPWM_Independent'
+          - operationMode: 'kPWM_SignedEdgeAligned'
+          - initializationControl: 'kPWM_Initialize_LocalSync'
+          - phaseDly: '0'
+          - reloadLogic: 'kPWM_ReloadImmediate'
+          - reloadSelect: 'kPWM_LocalReload'
+          - reloadFrequency: 'kPWM_LoadEveryOportunity'
+          - forceTrigger: 'kPWM_Force_Local'
+          - enableDebugMode: 'false'
+          - enableWait: 'false'
+          - outputTrigger_sel: ''
+          - loadOK: 'false'
+          - startCounter: 'false'
+          - interrupt_sel: ''
+          - dma_used: 'false'
+          - dma:
+            - pwmDMA_activate: 'false'
+            - captureDMA_enable: ''
+            - captureDMA_source: 'kPWM_DMARequestDisable'
+            - captureDMA_watermark_control: 'kPWM_FIFOWatermarksOR'
+        - channels:
+          - 0:
+            - channel_id: 'A'
+            - functionSel: 'pwmOutput'
+            - pwm:
+              - dutyCyclePercent: '100'
+              - level: 'kPWM_HighTrue'
+              - fault_channel0:
+                - dismap: ''
+                - quick_selection: 'default'
+              - faultState: 'kPWM_PwmFaultState0'
+              - pwmchannelenable: 'true'
+              - deadtime_input_by_force: 'kPWM_UsePwm'
+              - clockSource: 'kPWM_BusClock'
+              - deadtimeValue: '0'
+              - interrupt_sel: ''
+          - 1:
+            - channel_id: 'B'
+            - functionSel: 'pwmOutput'
+            - pwm:
+              - dutyCyclePercent: '0'
+              - level: 'kPWM_HighTrue'
+              - fault_channel0:
+                - dismap: ''
+                - quick_selection: 'default'
+              - faultState: 'kPWM_PwmFaultState0'
+              - pwmchannelenable: 'true'
+              - deadtime_input_by_force: 'kPWM_UsePwm'
+              - clockSource: 'kPWM_BusClock'
+              - deadtimeValue: '0'
+              - interrupt_sel: ''
+          - 2:
+            - channel_id: 'X'
+            - functionSel: 'notUsed'
+        - common_interruptEn: 'false'
+        - common_interrupt:
+          - IRQn: 'FLEXPWM0_SUBMODULE1_IRQn'
+          - enable_interrrupt: 'enabled'
+          - enable_priority: 'false'
+          - priority: '0'
+          - enable_custom_name: 'false'
+      - 2:
+        - sm: 'kPWM_Module_2'
+        - sm_id: 'SM2'
+        - config:
+          - clockSource: 'kPWM_BusClock'
+          - prescale: 'kPWM_Prescale_Divide_1'
+          - pwmFreq: '16 kHz'
+          - pairOperation: 'kPWM_Independent'
+          - operationMode: 'kPWM_SignedEdgeAligned'
+          - initializationControl: 'kPWM_Initialize_LocalSync'
+          - phaseDly: '0'
+          - reloadLogic: 'kPWM_ReloadImmediate'
+          - reloadSelect: 'kPWM_LocalReload'
+          - reloadFrequency: 'kPWM_LoadEveryOportunity'
+          - forceTrigger: 'kPWM_Force_Local'
+          - enableDebugMode: 'false'
+          - enableWait: 'false'
+          - outputTrigger_sel: ''
+          - loadOK: 'false'
+          - startCounter: 'false'
+          - interrupt_sel: ''
+          - dma_used: 'false'
+          - dma:
+            - pwmDMA_activate: 'false'
+            - captureDMA_enable: ''
+            - captureDMA_source: 'kPWM_DMARequestDisable'
+            - captureDMA_watermark_control: 'kPWM_FIFOWatermarksOR'
+        - channels:
+          - 0:
+            - channel_id: 'A'
+            - functionSel: 'pwmOutput'
+            - pwm:
+              - dutyCyclePercent: '0'
+              - level: 'kPWM_HighTrue'
+              - fault_channel0:
+                - dismap: ''
+                - quick_selection: 'default'
+              - faultState: 'kPWM_PwmFaultState0'
+              - pwmchannelenable: 'true'
+              - deadtime_input_by_force: 'kPWM_UsePwm'
+              - clockSource: 'kPWM_BusClock'
+              - deadtimeValue: '0'
+              - interrupt_sel: ''
+          - 1:
+            - channel_id: 'B'
+            - functionSel: 'pwmOutput'
+            - pwm:
+              - dutyCyclePercent: '0'
+              - level: 'kPWM_HighTrue'
+              - fault_channel0:
+                - dismap: ''
+                - quick_selection: 'default'
+              - faultState: 'kPWM_PwmFaultState0'
+              - pwmchannelenable: 'true'
+              - deadtime_input_by_force: 'kPWM_UsePwm'
+              - clockSource: 'kPWM_BusClock'
+              - deadtimeValue: '0'
+              - interrupt_sel: ''
+          - 2:
+            - channel_id: 'X'
+            - functionSel: 'notUsed'
+        - common_interruptEn: 'false'
+        - common_interrupt:
+          - IRQn: 'FLEXPWM0_SUBMODULE2_IRQn'
           - enable_interrrupt: 'enabled'
           - enable_priority: 'false'
           - priority: '0'
@@ -320,9 +426,81 @@ pwm_config_t FLEXPWM0_SM0_config = {
   .enableWait = false
 };
 
-pwm_signal_param_t FLEXPWM0_SM0_pwm_function_config[1]= {
+pwm_signal_param_t FLEXPWM0_SM0_pwm_function_config[2]= {
   {
     .pwmChannel = kPWM_PwmA,
+    .dutyCyclePercent = 0U,
+    .level = kPWM_HighTrue,
+    .faultState = kPWM_PwmFaultState0,
+    .pwmchannelenable = true,
+    .deadtimeValue = 0U
+  },
+  {
+    .pwmChannel = kPWM_PwmB,
+    .dutyCyclePercent = 50U,
+    .level = kPWM_HighTrue,
+    .faultState = kPWM_PwmFaultState0,
+    .pwmchannelenable = true,
+    .deadtimeValue = 0U
+  },
+};
+
+pwm_config_t FLEXPWM0_SM1_config = {
+  .clockSource = kPWM_BusClock,
+  .prescale = kPWM_Prescale_Divide_1,
+  .pairOperation = kPWM_Independent,
+  .initializationControl = kPWM_Initialize_LocalSync,
+  .reloadLogic = kPWM_ReloadImmediate,
+  .reloadSelect = kPWM_LocalReload,
+  .reloadFrequency = kPWM_LoadEveryOportunity,
+  .forceTrigger = kPWM_Force_Local,
+  .enableDebugMode = false,
+  .enableWait = false
+};
+
+pwm_signal_param_t FLEXPWM0_SM1_pwm_function_config[2]= {
+  {
+    .pwmChannel = kPWM_PwmA,
+    .dutyCyclePercent = 100U,
+    .level = kPWM_HighTrue,
+    .faultState = kPWM_PwmFaultState0,
+    .pwmchannelenable = true,
+    .deadtimeValue = 0U
+  },
+  {
+    .pwmChannel = kPWM_PwmB,
+    .dutyCyclePercent = 0U,
+    .level = kPWM_HighTrue,
+    .faultState = kPWM_PwmFaultState0,
+    .pwmchannelenable = true,
+    .deadtimeValue = 0U
+  },
+};
+
+pwm_config_t FLEXPWM0_SM2_config = {
+  .clockSource = kPWM_BusClock,
+  .prescale = kPWM_Prescale_Divide_1,
+  .pairOperation = kPWM_Independent,
+  .initializationControl = kPWM_Initialize_LocalSync,
+  .reloadLogic = kPWM_ReloadImmediate,
+  .reloadSelect = kPWM_LocalReload,
+  .reloadFrequency = kPWM_LoadEveryOportunity,
+  .forceTrigger = kPWM_Force_Local,
+  .enableDebugMode = false,
+  .enableWait = false
+};
+
+pwm_signal_param_t FLEXPWM0_SM2_pwm_function_config[2]= {
+  {
+    .pwmChannel = kPWM_PwmA,
+    .dutyCyclePercent = 0U,
+    .level = kPWM_HighTrue,
+    .faultState = kPWM_PwmFaultState0,
+    .pwmchannelenable = true,
+    .deadtimeValue = 0U
+  },
+  {
+    .pwmChannel = kPWM_PwmB,
     .dutyCyclePercent = 0U,
     .level = kPWM_HighTrue,
     .faultState = kPWM_PwmFaultState0,
@@ -364,6 +542,10 @@ const pwm_fault_param_t FLEXPWM0_Fault3_fault_config = {
 static void FLEXPWM0_init(void) {
   /* Initialize PWM submodule SM0 main configuration */
   PWM_Init(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM0, &FLEXPWM0_SM0_config);
+  /* Initialize PWM submodule SM1 main configuration */
+  PWM_Init(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM1, &FLEXPWM0_SM1_config);
+  /* Initialize PWM submodule SM2 main configuration */
+  PWM_Init(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM2, &FLEXPWM0_SM2_config);
   /* Initialize fault input filter configuration */
   PWM_SetupFaultInputFilter(FLEXPWM0_PERIPHERAL, &FLEXPWM0_faultInputFilter_config);
   /* Initialize fault channel 0 fault Fault0 configuration */
@@ -374,228 +556,105 @@ static void FLEXPWM0_init(void) {
   PWM_SetupFaults(FLEXPWM0_PERIPHERAL, FLEXPWM0_F0_FAULT2, &FLEXPWM0_Fault2_fault_config);
   /* Initialize fault channel 0 fault Fault3 configuration */
   PWM_SetupFaults(FLEXPWM0_PERIPHERAL, FLEXPWM0_F0_FAULT3, &FLEXPWM0_Fault3_fault_config);
+  /* Initialize submodule SM0 channel A output disable mapping to the selected faults */
+  PWM_SetupFaultDisableMap(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM0, FLEXPWM0_SM0_A, kPWM_faultchannel_0, (0U));
+  /* Initialize submodule SM0 channel B output disable mapping to the selected faults */
+  PWM_SetupFaultDisableMap(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM0, FLEXPWM0_SM0_B, kPWM_faultchannel_0, (0U));
+  /* Initialize submodule SM1 channel A output disable mapping to the selected faults */
+  PWM_SetupFaultDisableMap(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM1, FLEXPWM0_SM1_A, kPWM_faultchannel_0, (0U));
+  /* Initialize submodule SM1 channel B output disable mapping to the selected faults */
+  PWM_SetupFaultDisableMap(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM1, FLEXPWM0_SM1_B, kPWM_faultchannel_0, (0U));
+  /* Initialize submodule SM2 channel A output disable mapping to the selected faults */
+  PWM_SetupFaultDisableMap(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM2, FLEXPWM0_SM2_A, kPWM_faultchannel_0, (0U));
+  /* Initialize submodule SM2 channel B output disable mapping to the selected faults */
+  PWM_SetupFaultDisableMap(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM2, FLEXPWM0_SM2_B, kPWM_faultchannel_0, (0U));
   /* Initialize deadtime logic input for the channel A */
   PWM_SetupForceSignal(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM0, FLEXPWM0_SM0_A, kPWM_UsePwm);
+  /* Initialize deadtime logic input for the channel B */
+  PWM_SetupForceSignal(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM0, FLEXPWM0_SM0_B, kPWM_UsePwm);
+  /* Initialize deadtime logic input for the channel A */
+  PWM_SetupForceSignal(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM1, FLEXPWM0_SM1_A, kPWM_UsePwm);
+  /* Initialize deadtime logic input for the channel B */
+  PWM_SetupForceSignal(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM1, FLEXPWM0_SM1_B, kPWM_UsePwm);
+  /* Initialize deadtime logic input for the channel A */
+  PWM_SetupForceSignal(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM2, FLEXPWM0_SM2_A, kPWM_UsePwm);
+  /* Initialize deadtime logic input for the channel B */
+  PWM_SetupForceSignal(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM2, FLEXPWM0_SM2_B, kPWM_UsePwm);
   /* Setup PWM output setting for submodule SM0 */
-  PWM_SetupPwm(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM0, FLEXPWM0_SM0_pwm_function_config, 1U, kPWM_SignedCenterAligned, FLEXPWM0_SM0_COUNTER_FREQ_HZ, FLEXPWM0_SM0_SM_CLK_SOURCE_FREQ_HZ);
-  /* Initialize LDOK for update of the working registers */
-  PWM_SetPwmLdok(FLEXPWM0_PERIPHERAL, (kPWM_Control_Module_0), true);
-  /* Start selected counters */
-  PWM_StartTimer(FLEXPWM0_PERIPHERAL, (kPWM_Control_Module_0));
+  PWM_SetupPwm(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM0, FLEXPWM0_SM0_pwm_function_config, 2U, kPWM_SignedEdgeAligned, FLEXPWM0_SM0_COUNTER_FREQ_HZ, FLEXPWM0_SM0_SM_CLK_SOURCE_FREQ_HZ);
+  /* Setup PWM output setting for submodule SM1 */
+  PWM_SetupPwm(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM1, FLEXPWM0_SM1_pwm_function_config, 2U, kPWM_SignedEdgeAligned, FLEXPWM0_SM1_COUNTER_FREQ_HZ, FLEXPWM0_SM1_SM_CLK_SOURCE_FREQ_HZ);
+  /* Setup PWM output setting for submodule SM2 */
+  PWM_SetupPwm(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM2, FLEXPWM0_SM2_pwm_function_config, 2U, kPWM_SignedEdgeAligned, FLEXPWM0_SM2_COUNTER_FREQ_HZ, FLEXPWM0_SM2_SM_CLK_SOURCE_FREQ_HZ);
 }
 
 /***********************************************************************************************************************
- * CTIMER0 initialization code
+ * LPUART1 initialization code
  **********************************************************************************************************************/
 /* clang-format off */
 /* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
 instance:
-- name: 'CTIMER0'
-- type: 'ctimer'
-- mode: 'Capture_Match'
+- name: 'LPUART1'
+- type: 'lpuart'
+- mode: 'polling'
 - custom_name_enabled: 'false'
-- type_id: 'ctimer_2.2.2'
+- type_id: 'lpuart_2.11.0'
 - functional_group: 'BOARD_InitPeripherals'
-- peripheral: 'CTIMER0'
+- peripheral: 'LPUART1'
 - config_sets:
-  - fsl_ctimer:
-    - ctimerConfig:
-      - mode: 'kCTIMER_TimerMode'
-      - clockSource: 'FunctionClock'
-      - clockSourceFreq: 'ClocksTool_DefaultInit'
-      - timerPrescaler: '48000000'
-    - EnableTimerInInit: 'true'
-    - matchChannels:
-      - 0:
-        - matchChannelPrefixId: 'Match_0'
-        - matchChannel: 'kCTIMER_Match_0'
-        - matchValueStr: '1 Hz'
-        - enableCounterReset: 'true'
-        - enableCounterStop: 'false'
-        - outControl: 'kCTIMER_Output_NoAction'
-        - outPinInitValue: 'low'
-        - enableInterrupt: 'true'
-    - captureChannels: []
-    - interruptCallbackConfig:
-      - interrupt:
-        - IRQn: 'CTIMER0_IRQn'
-        - enable_priority: 'false'
-        - priority: '0'
-      - callback: 'kCTIMER_NoCallback'
+  - lpuartConfig_t:
+    - lpuartConfig:
+      - clockSource: 'LpuartClock'
+      - lpuartSrcClkFreq: 'ClocksTool_DefaultInit'
+      - baudRate_Bps: '115200'
+      - parityMode: 'kLPUART_ParityDisabled'
+      - dataBitsCount: 'kLPUART_EightDataBits'
+      - isMsb: 'false'
+      - stopBitCount: 'kLPUART_OneStopBit'
+      - enableMatchAddress1: 'false'
+      - matchAddress1: '0'
+      - enableMatchAddress2: 'false'
+      - matchAddress2: '0'
+      - txFifoWatermark: '0'
+      - rxFifoWatermark: '1'
+      - enableRxRTS: 'false'
+      - enableTxRTS: 'false'
+      - enableTxCTS: 'false'
+      - txCtsSource: 'kLPUART_CtsSourcePin'
+      - txCtsConfig: 'kLPUART_CtsSampleAtStart'
+      - txRtsPolarity: 'kLPUART_RtsPolarityLow'
+      - rtsWatermark: '0'
+      - rxIdleType: 'kLPUART_IdleTypeStartBit'
+      - rxIdleConfig: 'kLPUART_IdleCharacter1'
+      - enableTx: 'true'
+      - enableRx: 'true'
+      - inverseTxd: 'false'
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 /* clang-format on */
-const ctimer_config_t CTIMER0_config = {
-  .mode = kCTIMER_TimerMode,
-  .input = kCTIMER_Capture_0,
-  .prescale = 47999999
-};
-const ctimer_match_config_t CTIMER0_Match_0_config = {
-  .matchValue = 0,
-  .enableCounterReset = true,
-  .enableCounterStop = false,
-  .outControl = kCTIMER_Output_NoAction,
-  .outPinInitState = false,
-  .enableInterrupt = true
-};
-
-static void CTIMER0_init(void) {
-  /* CTIMER0 peripheral initialization */
-  CTIMER_Init(CTIMER0_PERIPHERAL, &CTIMER0_config);
-  /* Match channel 0 of CTIMER0 peripheral initialization */
-  CTIMER_SetupMatch(CTIMER0_PERIPHERAL, CTIMER0_MATCH_0_CHANNEL, &CTIMER0_Match_0_config);
-  /* Start the timer */
-  CTIMER_StartTimer(CTIMER0_PERIPHERAL);
-}
-
-/***********************************************************************************************************************
- * ADC0 initialization code
- **********************************************************************************************************************/
-/* clang-format off */
-/* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
-instance:
-- name: 'ADC0'
-- type: 'lpadc'
-- mode: 'LPADC'
-- custom_name_enabled: 'false'
-- type_id: 'lpadc_2.8.1'
-- functional_group: 'BOARD_InitPeripherals'
-- peripheral: 'ADC0'
-- config_sets:
-  - fsl_lpadc:
-    - lpadcConfig:
-      - clockSource: 'AsynchronousFunctionClock'
-      - clockSourceFreq: 'ClocksTool_DefaultInit'
-      - enableJustifiedLeft: 'false'
-      - enableInDozeMode: 'true'
-      - conversionAverageMode: 'kLPADC_ConversionAverage1'
-      - offsetCalibration: 'no'
-      - autoCalibrate: 'false'
-      - enableAnalogPreliminary: 'false'
-      - powerUpDelay: '0x80'
-      - referenceVoltageSource: 'kLPADC_ReferenceVoltageAlt1'
-      - powerLevelMode: 'kLPADC_PowerLevelAlt1'
-      - triggerPriorityPolicy: 'kLPADC_ConvPreemptImmediatelyNotAutoResumed'
-      - enableConvPause: 'false'
-      - convPauseDelay: '0'
-      - FIFOWatermark: '0'
-      - FIFOWatermarkDMA: 'false'
-    - lpadcConvCommandConfig: []
-    - lpadcConvTriggerConfig: []
-    - IRQ_cfg:
-      - interrupt_type: ''
-      - enable_irq: 'false'
-      - adc_interrupt:
-        - IRQn: 'ADC0_IRQn'
-        - enable_interrrupt: 'enabled'
-        - enable_priority: 'false'
-        - priority: '0'
-        - enable_custom_name: 'false'
-    - quick_selection: 'QS_LPADC_1'
- * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
-/* clang-format on */
-const lpadc_config_t ADC0_config = {
-  .enableInDozeMode = true,
-  .conversionAverageMode = kLPADC_ConversionAverage1,
-  .enableAnalogPreliminary = false,
-  .powerUpDelay = 0x80UL,
-  .referenceVoltageSource = kLPADC_ReferenceVoltageAlt1,
-  .powerLevelMode = kLPADC_PowerLevelAlt1,
-  .triggerPriorityPolicy = kLPADC_ConvPreemptImmediatelyNotAutoResumed,
-  .enableConvPause = false,
-  .convPauseDelay = 0UL,
-  .FIFOWatermark = 0UL,
+const lpuart_config_t LPUART1_config = {
+  .baudRate_Bps = 115200UL,
+  .parityMode = kLPUART_ParityDisabled,
+  .dataBitsCount = kLPUART_EightDataBits,
+  .isMsb = false,
+  .stopBitCount = kLPUART_OneStopBit,
+  .txFifoWatermark = 0U,
+  .rxFifoWatermark = 1U,
+  .enableRxRTS = false,
+  .enableTxRTS = false,
+  .enableTxCTS = false,
+  .txCtsSource = kLPUART_CtsSourcePin,
+  .txCtsConfig = kLPUART_CtsSampleAtStart,
+  .txRtsPolarity = kLPUART_RtsPolarityLow,
+  .rtsWatermark = 0U,
+  .rxIdleType = kLPUART_IdleTypeStartBit,
+  .rxIdleConfig = kLPUART_IdleCharacter1,
+  .enableTx = true,
+  .enableRx = true,
+  .inverseTxd = false
 };
 
-static void ADC0_init(void) {
-  /* Initialize LPADC converter */
-  LPADC_Init(ADC0_PERIPHERAL, &ADC0_config);
-}
-
-/***********************************************************************************************************************
- * LPI2C0 initialization code
- **********************************************************************************************************************/
-/* clang-format off */
-/* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
-instance:
-- name: 'LPI2C0'
-- type: 'lpi2c'
-- mode: 'master'
-- custom_name_enabled: 'false'
-- type_id: 'lpi2c_2.2.0'
-- functional_group: 'BOARD_InitPeripherals'
-- peripheral: 'LPI2C0'
-- config_sets:
-  - main:
-    - clockSource: 'Lpi2cClock'
-    - clockSourceFreq: 'ClocksTool_DefaultInit'
-  - interrupt_vector: []
-  - master:
-    - mode: 'transfer'
-    - config:
-      - enableMaster: 'true'
-      - enableDoze: 'true'
-      - debugEnable: 'false'
-      - ignoreAck: 'false'
-      - pinConfig: 'kLPI2C_2PinOpenDrain'
-      - baudRate_Hz: '100000'
-      - busIdleTimeout_ns: '0'
-      - pinLowTimeout_ns: '0'
-      - sdaGlitchFilterWidth_ns: '0'
-      - sclGlitchFilterWidth_ns: '0'
-      - hostRequest:
-        - enable: 'false'
-        - source: 'kLPI2C_HostRequestExternalPin'
-        - polarity: 'kLPI2C_HostRequestPinActiveHigh'
-      - edmaRequestSources: ''
-    - transfer:
-      - blocking: 'false'
-      - enable_custom_handle: 'false'
-      - callback:
-        - name: ''
-        - userData: ''
-      - flags: ''
-      - slaveAddress: '0'
-      - direction: 'kLPI2C_Write'
-      - subaddress: '0'
-      - subaddressSize: '1'
-      - blocking_buffer: 'false'
-      - enable_custom_buffer: 'false'
-      - dataSize: '1'
-    - quick_selection: 'qs_master_transfer'
- * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
-/* clang-format on */
-const lpi2c_master_config_t LPI2C0_masterConfig = {
-  .enableMaster = true,
-  .enableDoze = true,
-  .debugEnable = false,
-  .ignoreAck = false,
-  .pinConfig = kLPI2C_2PinOpenDrain,
-  .baudRate_Hz = 100000UL,
-  .busIdleTimeout_ns = 0UL,
-  .pinLowTimeout_ns = 0UL,
-  .sdaGlitchFilterWidth_ns = 0U,
-  .sclGlitchFilterWidth_ns = 0U,
-  .hostRequest = {
-    .enable = false,
-    .source = kLPI2C_HostRequestExternalPin,
-    .polarity = kLPI2C_HostRequestPinActiveHigh
-  }
-};
-lpi2c_master_transfer_t LPI2C0_masterTransfer = {
-  .flags = kLPI2C_TransferDefaultFlag,
-  .slaveAddress = 0,
-  .direction = kLPI2C_Write,
-  .subaddress = 0,
-  .subaddressSize = 1,
-  .data = LPI2C0_masterBuffer,
-  .dataSize = 1
-};
-lpi2c_master_handle_t LPI2C0_masterHandle;
-uint8_t LPI2C0_masterBuffer[LPI2C0_MASTER_BUFFER_SIZE];
-
-static void LPI2C0_init(void) {
-  LPI2C_MasterInit(LPI2C0_PERIPHERAL, &LPI2C0_masterConfig, LPI2C0_CLOCK_FREQ);
-  LPI2C_MasterTransferCreateHandle(LPI2C0_PERIPHERAL, &LPI2C0_masterHandle, NULL, NULL);
+static void LPUART1_init(void) {
+  LPUART_Init(LPUART1_PERIPHERAL, &LPUART1_config, LPUART1_CLOCK_SOURCE);
 }
 
 /***********************************************************************************************************************
@@ -604,12 +663,9 @@ static void LPI2C0_init(void) {
 void BOARD_InitPeripherals(void)
 {
   /* Initialize components */
-  SysTick_init();
   LPUART0_init();
   FLEXPWM0_init();
-  CTIMER0_init();
-  ADC0_init();
-  LPI2C0_init();
+  LPUART1_init();
 }
 
 /***********************************************************************************************************************

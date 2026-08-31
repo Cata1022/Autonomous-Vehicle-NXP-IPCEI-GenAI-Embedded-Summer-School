@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "rtos/freertos/lab-project-freertos-posix",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/rtos/freertos/lab-project-freertos-posix"
+	}
+}

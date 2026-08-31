@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "middleware/rtcesl",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/middleware/rtcesl"
+	}
+}

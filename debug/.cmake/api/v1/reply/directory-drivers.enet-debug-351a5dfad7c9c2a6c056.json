@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "drivers/enet",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/drivers/enet"
+	}
+}

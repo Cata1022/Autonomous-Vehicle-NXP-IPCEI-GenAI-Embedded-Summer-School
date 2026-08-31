@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "drivers/wkpu",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/drivers/wkpu"
+	}
+}

@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "drivers/erm",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/drivers/erm"
+	}
+}

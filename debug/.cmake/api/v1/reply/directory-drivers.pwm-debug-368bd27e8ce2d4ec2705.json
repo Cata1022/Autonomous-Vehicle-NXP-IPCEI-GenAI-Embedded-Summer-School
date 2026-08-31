@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "drivers/pwm",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/drivers/pwm"
+	}
+}

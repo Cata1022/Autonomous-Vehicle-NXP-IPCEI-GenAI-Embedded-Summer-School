@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "drivers/uart",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/drivers/uart"
+	}
+}

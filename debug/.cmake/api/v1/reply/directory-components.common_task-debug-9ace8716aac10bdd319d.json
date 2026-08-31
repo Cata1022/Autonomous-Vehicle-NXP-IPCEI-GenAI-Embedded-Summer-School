@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "components/common_task",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/components/common_task"
+	}
+}

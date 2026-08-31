@@ -1,0 +1,1 @@
+C:\Users\Catalin\Desktop\autonomous_vehicle\debug\mcux_config.h

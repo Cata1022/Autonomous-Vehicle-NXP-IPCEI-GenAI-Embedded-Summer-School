@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "components/cmsis_drivers/cmsis_lpsci",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/components/cmsis_drivers/cmsis_lpsci"
+	}
+}

@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "components/led",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/components/led"
+	}
+}

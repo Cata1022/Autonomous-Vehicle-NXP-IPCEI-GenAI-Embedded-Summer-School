@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "drivers/cache/lplmem",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/drivers/cache/lplmem"
+	}
+}

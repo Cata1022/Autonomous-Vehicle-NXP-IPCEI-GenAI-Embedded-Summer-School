@@ -1,4 +1,4 @@
-led_blinky_peripheral:
+main_peripheral:
   boards:
     frdmmcxa153: []
   contents:
@@ -10,10 +10,10 @@ led_blinky_peripheral:
         for debugging and further development.
       category: demo_apps
       example_readme:
-      - examples/demo_apps/led_blinky_peripheral/readme.md
-      - ${board_root}/${board}/demo_apps/led_blinky/example_board_readme.md
+      - examples/main_peripheral/readme.md
+      - ${board_root}/${board}/main/example_board_readme.md
       - ${board_root}/${board}/examples_shared_readme.md
-      name: led_blinky_peripheral${core_id_suffix_name}
-    meta_path: examples/demo_apps/led_blinky_peripheral
-    project-root-path: boards/${board}/demo_apps/led_blinky/${multicore_foldername}
+      name: main_peripheral${core_id_suffix_name}
+    meta_path: examples/main_peripheral
+    project-root-path: boards/${board}/main/${multicore_foldername}
   section-type: freestanding_application

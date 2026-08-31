@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "middleware/audio_voice/components",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/middleware/audio_voice/components"
+	}
+}

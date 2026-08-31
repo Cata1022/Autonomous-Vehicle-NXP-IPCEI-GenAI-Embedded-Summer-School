@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "drivers/ci_pi",
+		"source" : "D:/nxp/mcuxsdk/mcuxsdk/drivers/ci_pi"
+	}
+}
