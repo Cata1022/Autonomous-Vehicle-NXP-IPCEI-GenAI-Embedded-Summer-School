@@ -1,0 +1,8 @@
+D:/nxp/mcuxsdk/mcuxsdk/arch/arm/CMSIS/Core/Include/core_cm33.h:2358:22:__NVIC_EnableIRQ	16	static
+D:/nxp/mcuxsdk/mcuxsdk/drivers/common/fsl_common_arm.h:753:24:EnableIRQ	24	static
+D:/nxp/mcuxsdk/mcuxsdk/drivers/lpuart/fsl_lpuart.h:552:20:LPUART_SetRxFifoWatermark	16	static
+D:/nxp/mcuxsdk/mcuxsdk/drivers/lpuart/fsl_lpuart.h:827:23:LPUART_ReadByte	32	static
+C:/Users/Catalin/Desktop/autonomous_vehicle/uart_comm.c:14:6:LPUART1_IRQHandler	16	static
+C:/Users/Catalin/Desktop/autonomous_vehicle/uart_comm.c:32:6:LPUART0_SignalEvent	16	static
+C:/Users/Catalin/Desktop/autonomous_vehicle/uart_comm.c:37:6:UartComm_InitHardware	8	static
+C:/Users/Catalin/Desktop/autonomous_vehicle/uart_comm.c:47:6:UartComm_Process	48	static

@@ -2,7 +2,7 @@
 
 ## 1. Introduction
 
-This project builds a self-driving rover that pairs an **ESP32-S3 CAM** (vision and AI) with the **NXP FRDM-MCXA153** (bare-metal motor control and signaling). The rover strictly follows the lines of the road using computer vision processed on the ESP32. Initial STOP/GO commands are issued using Bluetooth Low Energy (BLE) via the ESP32.
+This project consists of a self-driving rover that pairs an **ESP32-S3 CAM** (vision and AI) with the **NXP FRDM-MCXA153** (bare-metal motor control and signaling). The rover strictly follows the lines of the road using computer vision processed on the ESP32. Initial STOP/GO commands are issued using Bluetooth Low Energy (BLE) via the ESP32.
 
 The purpose is to demonstrate a distributed embedded processing architecture for edge AI robotics. It is useful for students because it covers PWM motor control, UART inter-MCU communication, and PID control loops — all within a tangible, demonstrable physical system.
 
@@ -36,7 +36,7 @@ The purpose is to demonstrate a distributed embedded processing architecture for
 | SC-001 | Startup | NXP initializes PWM drivers for DRV8833 and establishes interrupt-driven UART buffer. ESP32 boots, calibrates camera, and waits for BLE GO command. |
 | SC-002 | Normal Operation | ESP32 tracks lane and sends continuous UART commands. NXP translates to left/right PWM for DRV8833 differential drive and manages turn signal blinking/buzzing. |
 | SC-003 | BLE STOP | User sends a STOP command via Bluetooth to the ESP32. ESP32 commands the NXP to halt all motors. |
-| SC-004 | Traffic Sign Override | (Advanced) ESP32 detects STOP sign via TinyML. Sends override command. NXP halts for configured duration. |
+| SC-004 | Traffic Sign Override | (Advanced) ESP32 detects traffic signs via a custom TinyML CNN. Once a turn direction is identified with high confidence, it locks the direction. The vehicle detects the physical intersection via camera pixel volume, automatically executes a hardcoded pivot maneuver, and resumes PID tracking. |
 | SC-005 | Communication Loss | NXP detects UART timeout/corruption. System ignores malformed packets. |
 | SC-006 | Debugging | Student connects USB serial console to NXP. Reads parsed UART packets and motor execution states in real time. |
 
@@ -187,6 +187,11 @@ For the recommended tier, the **ESP32-S3 CAM** connects via 3.3V UART (TX/RX cro
 | UART Command Parser | Receive ESP32 packets via 256-byte ISR ring buffer; parse safely ignoring garbage |
 | Command Execution | Execute parsed motor and turn signal commands on the physical hardware |
 | Debug/Logging | Print sensor values, motor duties, and system state to USB serial console |
+| Vision Processing (ESP32) | Capture frames (QVGA, Grayscale), crop ROIs, perform thresholding, calculate lane centroids and tripwire pixel volume |
+| PID Controller (ESP32) | Calculate differential motor speeds, apply deadzone compensation, and manage intersection turn logic/timing |
+| ML Inference (ESP32) | Feed cropped ROIs into the custom Edge Impulse CNN classifier, update confidence thresholds, and predict turn directions |
+| Web Server (ESP32) | Host a diagnostic HTTP endpoint to live-stream the exact 96x96 ROI being fed into the neural network |
+| BLE Interface (ESP32) | Handle wireless start/stop overriding commands via Bluetooth Low Energy |
 
 **Startup Sequence:** Initialize system clocks → Configure GPIO for Turn Signals → Configure FLEXPWM for DRV8833 and Buzzer → Configure LPUART1 (RX FIFO Watermark=0) → Start SysTick timer → Enter main loop.
 
@@ -203,8 +208,10 @@ For the recommended tier, the **ESP32-S3 CAM** connects via 3.3V UART (TX/RX cro
 - **Blinker State Machine:** States: `kSTATE_OFF`, `kSTATE_TURN_LEFT`, `kSTATE_TURN_RIGHT`. Transitions driven by UART commands and `SysTick` 100ms intervals.
 - **Slow-Decay PWM Strategy:** To operate the DRV8833 efficiently, the motor driver maps speeds (`-100` to `100`) to IN1 and IN2 duties where one channel is driven HIGH and the other is modulated, effectively creating active braking when coasting.
 - **UART Packet Parsing:** Simple framed protocol with start byte, payload (speed, steering), checksum, end byte. Circular buffer in ISR.
-- **PID Lane Keeping (ESP32 side):** Grayscale → ROI mask → Binarize → Find lane centroids → Calculate error from center → PID output → Send via UART.
-- **TinyML Inference (Advanced, ESP32 side):** Resize frame → Run TFLite model → If confidence > threshold → Send override command.
+- **Regions of Interest (ROI) (ESP32 side):** To optimize processing time, the QVGA (320x240) camera feed is segmented. A bottom slice (320x40) is used as a full-width tripwire for intersections and line tracking, while a specific fixed patch (96x96) is fed to the ML model.
+- **PID Lane Keeping (ESP32 side):** The bottom ROI is converted to grayscale, thresholded, and scanned for the tracking line to compute the line's centroid. The PID controller continuously adjusts the differential motor speeds based on the centroid error from the setpoint. It incorporates memory for "lost line" states (maintaining previous speeds or creeping forward) and features a kinematic deadzone elimination step to overcome static friction on the physical track.
+- **Intersection Detection & Execution (ESP32 side):** By analyzing the volume of black pixels in the tripwire ROI, the vehicle detects intersection blocks. Upon detection, it latches a parking brake. If an ML turn direction was locked in prior to the intersection, it executes a hardcoded turn sequence (timed forward/pivot maneuvers). If no turn is locked in, the vehicle halts and awaits a manual BLE command.
+- **TinyML Inference (Advanced, ESP32 side):** A Custom Keras CNN (3-layer Grayscale) replaced earlier, heavier models. Initial attempts with a MobileNetV2 (float32) ran too slowly (over 1s latency), and an int8 quantized version crashed the ESP-NN hardware accelerator because the tensor arena exceeded internal SRAM limits, forcing it into PSRAM (which causes vector instruction panics on the ESP32). The final ultra-lean model fits entirely in internal SRAM, achieving high inference speeds (<10ms). However, the model still occasionally struggles with identifying signs in real-world scenarios due to harsh lighting variations and severe hardware/memory limitations restricting model depth.
 
 ### 4.4 Functional Requirements Summary
 
@@ -306,59 +313,18 @@ For the recommended tier, the **ESP32-S3 CAM** connects via 3.3V UART (TX/RX cro
 
 ## 8. Conclusions
 
-```
-TODO: Complete at the end of the project.
+The distributed embedded architecture successfully showcased how a robust, bare-metal microcontroller (NXP MCXA153) can manage hard real-time tasks like motor actuation, while a secondary processor (ESP32-S3 CAM) handles intensive computer vision and TinyML workloads. 
 
-Discuss:
-- what was learned;
-- what worked well;
-- what was difficult;
-- what would be improved in a future version;
-- how Gen AI helped or failed to help.
-```
+**What worked well:**
+- The UART communication protocol proved extremely resilient. Hardware overruns were eliminated by using an interrupt-driven circular buffer on the MCXA153.
+- The dual-core FreeRTOS architecture on the ESP32 effectively decoupled the ML inference from the PID line-tracking, ensuring the motors were always updated with real-time centroid data even while the neural network was processing.
+- The use of precise Regions of Interest (ROIs) dramatically reduced pixel processing overhead, allowing the PID controller to operate at a stable, unthrottled loop rate.
 
-## 9. Download
+**What was difficult & What would be improved:**
+- The physical track introduced static friction challenges, which required implementing a kinematic deadzone eliminator in the PID algorithm to ensure the car could reliably start moving.
+- **Machine Learning Hardware Deficit:** The ESP32-S3's internal SRAM (512KB) and ESP-NN vector hardware accelerator proved to be a severe bottleneck. The hardware accelerator crashes if the tensor arena is placed in the external PSRAM. Because the camera buffers and OS stacks consume over 150KB of internal SRAM, the ML model's arena was strictly limited to under 60KB. 
+- Early attempts to use a MobileNetV2 (float32) were impossibly slow (>1 second per frame), and its quantized int8 version caused hardware panics due to memory allocation constraints. 
+- The final implementation successfully deployed an ultra-lean 3-layer Custom Keras CNN (grayscale, utilizing strided convolutions) that fit entirely within internal SRAM, achieving lightning-fast inference speeds. However, this heavily restricted model depth resulted in diminished accuracy. The model still occasionally struggles with identifying signs in real-world scenarios due to harsh lighting variations. Future versions would benefit from a more powerful inference edge board (like a Coral Edge TPU or Raspberry Pi) or a dedicated SRAM-heavy ML microcontroller to allow deeper networks without sacrificing hardware acceleration.
 
-```
-TODO: Add links or attach:
-- source code archive;
-- schematic files;
-- build instructions;
-- README;
-- ChangeLog;
-- test logs;
-- demo video;
-- final presentation.
-```
-
-## 10. Project Journal
-
-| Date | Work Completed | Problems / Risks | Next Steps | Author |
-|---|---|---|---|---|
-| TODO | TODO | TODO | TODO | TODO |
-| TODO | TODO | TODO | TODO | TODO |
-| TODO | TODO | TODO | TODO | TODO |
-| TODO | TODO | TODO | TODO | TODO |
-
-## 11. Bibliography / Resources
-
-### Hardware Resources
-
-- TODO: FRDM-MCXA153 board documentation and user guide.
-- TODO: MCXA153 datasheet / reference manual.
-- TODO: DRV8833 motor driver datasheet.
-- TODO: ESP32-S3 CAM module documentation.
-- TODO: 2S LiPo battery specifications and safety guide.
-
-### Software Resources
-
-- TODO: NXP MCUXpresso SDK documentation.
-- TODO: ESP-IDF documentation (for ESP32-S3).
-- TODO: TensorFlow Lite for Microcontrollers documentation (if used).
-- TODO: Project repository link.
-
-### Learning Resources
-
-- TODO: Course/lab notes.
-- TODO: Tutorials or papers used.
-- TODO: PID control theory references.
+**How Gen AI helped:**
+Generative AI acted as an expert pair programmer throughout the development process. It successfully diagnosed the obscure memory allocation crash involving the ESP-NN hardware vector instructions and PSRAM. It also designed the architectural refactor, optimized the PID deadzone compensation, and architected the custom Keras CNN architecture to bypass the memory limits while retaining hardware acceleration.

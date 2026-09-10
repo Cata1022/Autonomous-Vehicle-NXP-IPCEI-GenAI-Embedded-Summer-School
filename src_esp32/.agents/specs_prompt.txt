@@ -1,0 +1,5 @@
+Use .agents/specs_and_rules.md
+
+APPLICATION_TASK:
+
+Return the specification only for user review. Do not edit any file

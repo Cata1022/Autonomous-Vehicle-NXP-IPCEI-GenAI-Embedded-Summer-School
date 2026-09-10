@@ -1,0 +1,5 @@
+D:/nxp/mcuxsdk/mcuxsdk/arch/arm/CMSIS/Core/Include/core_cm33.h:2555:22:__NVIC_SetPriority	16	static
+D:/nxp/mcuxsdk/mcuxsdk/arch/arm/CMSIS/Core/Include/core_cm33.h:3108:26:SysTick_Config	16	static
+C:/Users/Catalin/Desktop/autonomous_vehicle/main.c:13:6:SysTick_Handler	8	static
+C:/Users/Catalin/Desktop/autonomous_vehicle/main.c:21:6:InitHardware	8	static
+C:/Users/Catalin/Desktop/autonomous_vehicle/main.c:42:5:main	8	static

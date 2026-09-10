@@ -1,0 +1,14 @@
+D:/nxp/mcuxsdk/mcuxsdk/drivers/gpio/fsl_gpio.h:346:20:GPIO_PinWrite	24	static
+C:/Users/Catalin/Desktop/autonomous_vehicle/turn_signals.c:38:13:SetAllSignalsOff	8	static
+C:/Users/Catalin/Desktop/autonomous_vehicle/turn_signals.c:53:13:SetTurnSignalLeftActive	8	static
+C:/Users/Catalin/Desktop/autonomous_vehicle/turn_signals.c:63:13:SetTurnSignalLeftInactive	8	static
+C:/Users/Catalin/Desktop/autonomous_vehicle/turn_signals.c:73:13:SetTurnSignalRightActive	8	static
+C:/Users/Catalin/Desktop/autonomous_vehicle/turn_signals.c:83:13:SetTurnSignalRightInactive	8	static
+C:/Users/Catalin/Desktop/autonomous_vehicle/turn_signals.c:96:6:TurnSignals_InitHardware	8	static
+C:/Users/Catalin/Desktop/autonomous_vehicle/turn_signals.c:101:6:TurnSignals_Tick	4	static
+C:/Users/Catalin/Desktop/autonomous_vehicle/turn_signals.c:114:6:SignalLeft	8	static
+C:/Users/Catalin/Desktop/autonomous_vehicle/turn_signals.c:123:6:SignalRight	8	static
+C:/Users/Catalin/Desktop/autonomous_vehicle/turn_signals.c:132:6:SignalOff	8	static
+C:/Users/Catalin/Desktop/autonomous_vehicle/turn_signals.c:139:6:ProcessBlinker	8	static
+C:/Users/Catalin/Desktop/autonomous_vehicle/turn_signals.c:174:13:UpdateSM0FrequencyAndDuty	16	static
+C:/Users/Catalin/Desktop/autonomous_vehicle/turn_signals.c:200:6:ProcessBuzzer	16	static

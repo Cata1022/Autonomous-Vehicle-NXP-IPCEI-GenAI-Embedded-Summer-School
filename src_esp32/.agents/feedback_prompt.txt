@@ -1,0 +1,7 @@
+Use .agents/specs_and_rules.md
+
+FEEDBACK:
+
+INTENDED_BEHAVIOR:
+
+Do not edit any file. Return the change specification only

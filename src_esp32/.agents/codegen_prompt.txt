@@ -1,0 +1,1 @@
+Use .agents/specs_and_rules.md with the specification above in order to implement the desired features
