@@ -269,15 +269,15 @@ For the recommended tier, the **ESP32-S3 CAM** connects via 3.3V UART (TX/RX cro
 - [X] Current limits checked (GPIO drive strength for LEDs/Buzzer)
 - [X] Power budget checked (Battery → Regulator → MCUs; Battery → DRV8833 → Motors)
 - [X] External modules checked (DRV8833, ESP32-S3 CAM)
-- [ ] Advanced components approved or removed (TinyML on ESP32)
-- [ ] Sensor/actuator interfaces confirmed
-- [ ] Firmware architecture approved (bare-metal superloop + UART ISR)
-- [ ] Timing and memory constraints reviewed
-- [ ] Test plan reviewed
-- [ ] Traceability reviewed
-- [ ] Safety/privacy/security risks reviewed
-- [ ] AI assumptions accepted or rejected
-- [ ] Implementation allowed to start
+- [X] Advanced components approved or removed (TinyML on ESP32)
+- [X] Sensor/actuator interfaces confirmed
+- [X] Firmware architecture approved (bare-metal superloop + UART ISR)
+- [X] Timing and memory constraints reviewed
+- [X] Test plan reviewed
+- [X] Traceability reviewed
+- [X] Safety/privacy/security risks reviewed
+- [X] AI assumptions accepted or rejected
+- [X] Implementation allowed to start
 
 ## 7. Obtained Results
 
@@ -294,10 +294,15 @@ For the recommended tier, the **ESP32-S3 CAM** connects via 3.3V UART (TX/RX cro
 3. The ESP32-S3-CAM successfully:
 	- communicates motor controls and turn signal commands with the MCXA153
 	- tracks the road using the PID algorithm
-4. TinyML features are still to be implemented (possibly using Edge Impulse)
+    - detects intersections	 
+    - recognises traffic signs using a TinyML classifier model
 5. Attached below is a picture of the vehicle on the custom built track:
 
 ![image](hardware/vehicle.jpg)
+
+6. Video of the fully functional car:
+
+[![Demo](hardware/video_thumbnail.jpg)](https://drive.google.com/file/d/1B0jAqS5aXTMIYaHL0EXGuWcjN_YQXrFH/view?usp=sharing)
 
 ## 8. Conclusions
 
