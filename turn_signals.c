@@ -1,6 +1,6 @@
 #include "turn_signals.h"
+#include "pwm_control.h"
 #include "board.h"
-#include "peripherals.h"
 #include "pin_mux.h"
 #include <stdio.h>
 
@@ -37,14 +37,7 @@ static BlinkPhase blinkPhase = kBLINK_PHASE_OFF;
 /* ========================================================================== */
 static void SetAllSignalsOff(void)
 {
-    PWM_UpdatePwmDutycycle(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM0, FLEXPWM0_SM0_A, kPWM_SignedEdgeAligned, 0U);
-    PWM_UpdatePwmDutycycle(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM0, kPWM_PwmX, kPWM_SignedEdgeAligned, 0U);
-    
-    PWM_UpdatePwmDutycycle(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM1, kPWM_PwmX, kPWM_SignedEdgeAligned, 0U);
-    PWM_UpdatePwmDutycycle(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM2, kPWM_PwmX, kPWM_SignedEdgeAligned, 100U);
-    
-    PWM_UpdatePwmDutycycle(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM0, FLEXPWM0_SM0_B, kPWM_SignedEdgeAligned, 0U);
-    PWM_SetPwmLdok(FLEXPWM0_PERIPHERAL, (1U << FLEXPWM0_SM0) | (1U << FLEXPWM0_SM1) | (1U << FLEXPWM0_SM2), true);
+    PwmControl_SetAllSignalsOffPWM();
     
     /* Left GPIOs */
     GPIO_PinWrite(BOARD_INITPINS_LED_FRONT_LEFT_BLUE_GPIO, BOARD_INITPINS_LED_FRONT_LEFT_BLUE_GPIO_PIN, 0U);
@@ -59,9 +52,8 @@ static void SetAllSignalsOff(void)
 
 static void SetTurnSignalLeftActive(void)
 {
-    PWM_UpdatePwmDutycycle(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM0, FLEXPWM0_SM0_A, kPWM_SignedEdgeAligned, 90U);
-    PWM_UpdatePwmDutycycle(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM0, kPWM_PwmX, kPWM_SignedEdgeAligned, 10U);
-    PWM_SetPwmLdok(FLEXPWM0_PERIPHERAL, 1U << FLEXPWM0_SM0, true);
+    PwmControl_SetLeftTurnSignalPWM(90U, 10U);
+    PwmControl_ReloadLeftTurnPWM();
     
     GPIO_PinWrite(BOARD_INITPINS_LED_FRONT_LEFT_BLUE_GPIO, BOARD_INITPINS_LED_FRONT_LEFT_BLUE_GPIO_PIN, 1U);
     GPIO_PinWrite(BOARD_INITPINS_LED_FRONT_LEFT_RED_GPIO, BOARD_INITPINS_LED_FRONT_LEFT_RED_GPIO_PIN, 0U);
@@ -70,9 +62,8 @@ static void SetTurnSignalLeftActive(void)
 
 static void SetTurnSignalLeftInactive(void)
 {
-    PWM_UpdatePwmDutycycle(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM0, FLEXPWM0_SM0_A, kPWM_SignedEdgeAligned, 100U);
-    PWM_UpdatePwmDutycycle(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM0, kPWM_PwmX, kPWM_SignedEdgeAligned, 0U);
-    PWM_SetPwmLdok(FLEXPWM0_PERIPHERAL, 1U << FLEXPWM0_SM0, true);
+    PwmControl_SetLeftTurnSignalPWM(100U, 0U);
+    PwmControl_ReloadLeftTurnPWM();
     
     GPIO_PinWrite(BOARD_INITPINS_LED_FRONT_LEFT_BLUE_GPIO, BOARD_INITPINS_LED_FRONT_LEFT_BLUE_GPIO_PIN, 1U);
     GPIO_PinWrite(BOARD_INITPINS_LED_FRONT_LEFT_RED_GPIO, BOARD_INITPINS_LED_FRONT_LEFT_RED_GPIO_PIN, 1U);
@@ -81,9 +72,8 @@ static void SetTurnSignalLeftInactive(void)
 
 static void SetTurnSignalRightActive(void)
 {
-    PWM_UpdatePwmDutycycle(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM2, kPWM_PwmX, kPWM_SignedEdgeAligned, 10U);
-    PWM_UpdatePwmDutycycle(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM1, kPWM_PwmX, kPWM_SignedEdgeAligned, 10U);
-    PWM_SetPwmLdok(FLEXPWM0_PERIPHERAL, (1U << FLEXPWM0_SM1) | (1U << FLEXPWM0_SM2), true);
+    PwmControl_SetRightTurnSignalPWM(10U, 10U);
+    PwmControl_ReloadRightTurnPWM();
 
     GPIO_PinWrite(BOARD_INITPINS_LED_FRONT_RIGHT_BLUE_GPIO, BOARD_INITPINS_LED_FRONT_RIGHT_BLUE_GPIO_PIN, 1U);
     GPIO_PinWrite(BOARD_INITPINS_LED_FRONT_RIGHT_RED_GPIO, BOARD_INITPINS_LED_FRONT_RIGHT_RED_GPIO_PIN, 0U);
@@ -92,9 +82,8 @@ static void SetTurnSignalRightActive(void)
 
 static void SetTurnSignalRightInactive(void)
 {
-    PWM_UpdatePwmDutycycle(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM2, kPWM_PwmX, kPWM_SignedEdgeAligned, 0U);
-    PWM_UpdatePwmDutycycle(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM1, kPWM_PwmX, kPWM_SignedEdgeAligned, 0U);
-    PWM_SetPwmLdok(FLEXPWM0_PERIPHERAL, (1U << FLEXPWM0_SM1) | (1U << FLEXPWM0_SM2), true);
+    PwmControl_SetRightTurnSignalPWM(0U, 0U);
+    PwmControl_ReloadRightTurnPWM();
 
     GPIO_PinWrite(BOARD_INITPINS_LED_FRONT_RIGHT_BLUE_GPIO, BOARD_INITPINS_LED_FRONT_RIGHT_BLUE_GPIO_PIN, 1U);
     GPIO_PinWrite(BOARD_INITPINS_LED_FRONT_RIGHT_RED_GPIO, BOARD_INITPINS_LED_FRONT_RIGHT_RED_GPIO_PIN, 1U);
@@ -106,37 +95,7 @@ static void SetTurnSignalRightInactive(void)
 /* ========================================================================== */
 void TurnSignals_InitHardware(void)
 {
-    /* Fix the fault map explicitly just in case*/
-    PWM_SetupFaultDisableMap(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM0, FLEXPWM0_SM0_A, kPWM_faultchannel_0, 0U);
-    PWM_SetupFaultDisableMap(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM0, kPWM_PwmX, kPWM_faultchannel_0, 0U);
-    
-    PWM_SetupFaultDisableMap(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM1, kPWM_PwmX, kPWM_faultchannel_0, 0U);
-    PWM_SetupFaultDisableMap(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM2, kPWM_PwmX, kPWM_faultchannel_0, 0U);
-
-    pwm_signal_param_t sm0Config[3] = {
-        { .pwmChannel = kPWM_PwmA, .dutyCyclePercent = 0U, .level = kPWM_HighTrue, .faultState = kPWM_PwmFaultState0, .pwmchannelenable = true, .deadtimeValue = 0U },
-        { .pwmChannel = kPWM_PwmB, .dutyCyclePercent = 0U, .level = kPWM_HighTrue, .faultState = kPWM_PwmFaultState0, .pwmchannelenable = true, .deadtimeValue = 0U },
-        { .pwmChannel = kPWM_PwmX, .dutyCyclePercent = 0U, .level = kPWM_HighTrue, .faultState = kPWM_PwmFaultState0, .pwmchannelenable = true, .deadtimeValue = 0U }
-    };
-    PWM_SetupPwm(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM0, sm0Config, 3U, kPWM_SignedEdgeAligned, FLEXPWM0_SM0_COUNTER_FREQ_HZ, FLEXPWM0_SM0_SM_CLK_SOURCE_FREQ_HZ);
-
-    pwm_signal_param_t sm1Config[3] = {
-        { .pwmChannel = kPWM_PwmA, .dutyCyclePercent = 100U, .level = kPWM_HighTrue, .faultState = kPWM_PwmFaultState0, .pwmchannelenable = true, .deadtimeValue = 0U },
-        { .pwmChannel = kPWM_PwmB, .dutyCyclePercent = 100U, .level = kPWM_HighTrue, .faultState = kPWM_PwmFaultState0, .pwmchannelenable = true, .deadtimeValue = 0U },
-        { .pwmChannel = kPWM_PwmX, .dutyCyclePercent = 0U, .level = kPWM_HighTrue, .faultState = kPWM_PwmFaultState0, .pwmchannelenable = true, .deadtimeValue = 0U }
-    };
-    PWM_SetupPwm(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM1, sm1Config, 3U, kPWM_SignedEdgeAligned, FLEXPWM0_SM1_COUNTER_FREQ_HZ, FLEXPWM0_SM1_SM_CLK_SOURCE_FREQ_HZ);
-
-    pwm_signal_param_t sm2Config[3] = {
-        { .pwmChannel = kPWM_PwmA, .dutyCyclePercent = 100U, .level = kPWM_HighTrue, .faultState = kPWM_PwmFaultState0, .pwmchannelenable = true, .deadtimeValue = 0U },
-        { .pwmChannel = kPWM_PwmB, .dutyCyclePercent = 100U, .level = kPWM_HighTrue, .faultState = kPWM_PwmFaultState0, .pwmchannelenable = true, .deadtimeValue = 0U },
-        { .pwmChannel = kPWM_PwmX, .dutyCyclePercent = 100U, .level = kPWM_HighTrue, .faultState = kPWM_PwmFaultState0, .pwmchannelenable = true, .deadtimeValue = 0U }
-    };
-    PWM_SetupPwm(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM2, sm2Config, 3U, kPWM_SignedEdgeAligned, FLEXPWM0_SM2_COUNTER_FREQ_HZ, FLEXPWM0_SM2_SM_CLK_SOURCE_FREQ_HZ);
-
-    /* Start Timers and Load logic for all Submodules */
-    PWM_SetPwmLdok(FLEXPWM0_PERIPHERAL, (1U << FLEXPWM0_SM0) | (1U << FLEXPWM0_SM1) | (1U << FLEXPWM0_SM2), true);
-    PWM_StartTimer(FLEXPWM0_PERIPHERAL, (1U << FLEXPWM0_SM0) | (1U << FLEXPWM0_SM1) | (1U << FLEXPWM0_SM2));
+    PwmControl_InitTurnSignals();
 }
 
 void TurnSignals_Tick(void)
@@ -214,40 +173,28 @@ void ProcessBlinker(void)
 
 static void UpdateSM0FrequencyAndDuty(uint32_t freq)
 {
-    pwm_signal_param_t pwmBConfig = {
-        .pwmChannel = kPWM_PwmB,
-        .dutyCyclePercent = 50U,
-        .level = kPWM_HighTrue,
-        .faultState = kPWM_PwmFaultState0,
-        .pwmchannelenable = true,
-        .deadtimeValue = 0U
-    };
-    
     /* Change frequency for the entire Submodule 0 and set Channel B to 50% */
-    PWM_SetupPwm(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM0, &pwmBConfig, 1U, kPWM_SignedEdgeAligned, freq, FLEXPWM0_SM0_SM_CLK_SOURCE_FREQ_HZ);
+    PwmControl_SetBuzzerFrequencyAndDuty(freq, 50U);
     
     /* Re-apply duty cycles for channels A and X because the submodule period (VAL1) has changed */
     if (currentState == kSTATE_TURN_LEFT)
     {
         if (blinkPhase == kBLINK_PHASE_OFF) /* Currently active visual phase */
         {
-            PWM_UpdatePwmDutycycle(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM0, FLEXPWM0_SM0_A, kPWM_SignedEdgeAligned, 90U);
-            PWM_UpdatePwmDutycycle(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM0, kPWM_PwmX, kPWM_SignedEdgeAligned, 10U);
+            PwmControl_SetLeftTurnSignalPWM(90U, 10U);
         }
         else /* Currently inactive visual phase */
         {
-            PWM_UpdatePwmDutycycle(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM0, FLEXPWM0_SM0_A, kPWM_SignedEdgeAligned, 100U);
-            PWM_UpdatePwmDutycycle(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM0, kPWM_PwmX, kPWM_SignedEdgeAligned, 0U);
+            PwmControl_SetLeftTurnSignalPWM(100U, 0U);
         }
     }
     else
     {
         /* Right turn or OFF state: left LEDs on SM0 should be off */
-        PWM_UpdatePwmDutycycle(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM0, FLEXPWM0_SM0_A, kPWM_SignedEdgeAligned, 0U);
-        PWM_UpdatePwmDutycycle(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM0, kPWM_PwmX, kPWM_SignedEdgeAligned, 0U);
+        PwmControl_SetLeftTurnSignalPWM(0U, 0U);
     }
     
-    PWM_SetPwmLdok(FLEXPWM0_PERIPHERAL, 1U << FLEXPWM0_SM0, true);
+    PwmControl_ReloadLeftTurnPWM();
 }
 
 void ProcessBuzzer(void)
@@ -259,8 +206,7 @@ void ProcessBuzzer(void)
         if (currentState == kSTATE_OFF)
         {
             /* Ensure buzzer stays quiet when signals are off */
-            PWM_UpdatePwmDutycycle(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM0, FLEXPWM0_SM0_B, kPWM_SignedEdgeAligned, 0U);
-            PWM_SetPwmLdok(FLEXPWM0_PERIPHERAL, 1U << FLEXPWM0_SM0, true);
+            PwmControl_SetBuzzerDuty(0U);
             useHighFreq = true; /* Reset so the first buzz is always high */
         }
         else
@@ -278,14 +224,12 @@ void ProcessBuzzer(void)
                 else 
                 {
                     /* Keep buzzing at current freq with 50% duty */
-                    PWM_UpdatePwmDutycycle(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM0, FLEXPWM0_SM0_B, kPWM_SignedEdgeAligned, 50U);
-                    PWM_SetPwmLdok(FLEXPWM0_PERIPHERAL, 1U << FLEXPWM0_SM0, true);
+                    PwmControl_SetBuzzerDuty(50U);
                 }
             }
             else
             {
-                PWM_UpdatePwmDutycycle(FLEXPWM0_PERIPHERAL, FLEXPWM0_SM0, FLEXPWM0_SM0_B, kPWM_SignedEdgeAligned, 0U);
-                PWM_SetPwmLdok(FLEXPWM0_PERIPHERAL, 1U << FLEXPWM0_SM0, true);
+                PwmControl_SetBuzzerDuty(0U);
             }
         }
     }

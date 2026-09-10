@@ -24,6 +24,8 @@ mcux_add_source(
     SOURCES main.c
             turn_signals.c
             motors.c
+            uart_comm.c
+            pwm_control.c
 )
 
 
